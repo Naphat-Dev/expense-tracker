@@ -17,3 +17,7 @@ export function formatCurrency(amount: number): string {
     minimumFractionDigits: 2,
   }).format(amount)
 }
+
+export function toCents(amount: number): number {
+  return Math.round(amount * 100)
+}

@@ -16,7 +16,7 @@ function ExpenseList(props) {
 
     return (
         <div className='mt-5'>{expensesList.map((item) =>
-            <ExpenseItem key={item.id} expenses={item} />)}</div>
+            <ExpenseItem deleteExpense={props.deleteExpense} updateExpense={props.updateExpense} key={item.id} expenses={item} />)}</div>
     );
 }
 

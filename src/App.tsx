@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Expense, ExpenseDraft } from './types/expense'
 import ExpenseForm from './components/ExpenseForm'
 import SummaryCards from './components/SummaryCards'
 import ExpenseList from './components/ExpenseList/ExpenseList'
 import { v4 as uuid } from 'uuid'
+import { toCents } from './utils/format'
 
 
 
@@ -21,6 +22,35 @@ function App() {
     console.log(newExpense)
   }
 
+  const deleteExpense = (id: string) => {
+    setExpense(expenses.filter((e) => e.id !== id))
+  }
+
+  const updateExpense = (id: string, draft: ExpenseDraft) => {
+    const updatedExpense: Expense = {
+      ...draft,
+      id,
+    }
+    setExpense(expenses.map((e) => (e.id === id ? updatedExpense : e)))
+  }
+
+  const summary = useMemo(() => {
+    let incomeCents = 0
+    let expenseCents = 0
+
+    for (const e of expenses) {
+      if (e.type === 'income') incomeCents += toCents(e.amount)
+      else expenseCents += toCents(e.amount)
+    }
+
+    return {
+      income: incomeCents / 100,
+      expense: expenseCents / 100,
+      balance: (incomeCents - expenseCents) / 100,
+    }
+  }, [expenses])
+
+
   return (
     <div className='bg-gray-100 min-h-screen px-4 py-10 sm:px-8 '>
       <header className='mx-auto mb-8 max-w-5xl'>
@@ -34,8 +64,8 @@ function App() {
         </div>
 
         <div>
-          <SummaryCards />
-          <ExpenseList expenses={expenses} />
+          <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
+          <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
         </div>
       </main>
     </div>

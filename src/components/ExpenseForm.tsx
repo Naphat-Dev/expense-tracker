@@ -22,11 +22,11 @@ function ExpenseForm(props) {
   const [form, setForm] = useState(INITIAL_FORM)
   const [err, setErr] = useState(null)
 
-  function updateField(fieldName, value) {
+  const updateField = (fieldName, value) => {
     setForm((prevForm) => ({ ...prevForm, [fieldName]: value }))
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     const amount = Number(form.amount)
@@ -50,8 +50,18 @@ function ExpenseForm(props) {
     // console.log(form)
     props.addExpense(newdata);
 
-    setForm({  date: form.date, ...INITIAL_FORM })
+    setForm({ date: form.date, ...INITIAL_FORM })
     setErr(null)
+  }
+
+  const handleChange = (e) => {
+    let value = e.target.value
+
+    // ตัดเลข 0 นำหน้าออก แต่เก็บกรณี "0" เดี่ยวๆ หรือ "0.xx" ไว้
+    value = value.replace(/^0+(?=\d)/, '')
+
+    updateField('amount', value)
+
   }
 
   return (
@@ -89,7 +99,7 @@ function ExpenseForm(props) {
               step="0.01"
               required
               value={form.amount}
-              onChange={(e) => updateField('amount', e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className='flex flex-col gap-2'>
