@@ -68,7 +68,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                         </div>
                     </div>
                     <div className='flex items-center gap-3'>
-                        <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-red-400'} `}>
+                        <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
                             {type === 'income' ? '+' : '-'}
                             <input
                                 type="number"

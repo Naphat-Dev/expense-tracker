@@ -21,9 +21,9 @@ function SummaryCards({ income, expense, balance }: SummaryCardsProps) {
   return (
     <div className='grid gap-4 grid-cols-3'>
       {cards.map((C) => (
-        <div key={C.label} className='rounded-2xl border-line bg-white/60 p-5'>
+        <div key={C.label} className='rounded-2xl border border-line bg-white/60 p-5'>
           <h2 className='text-sm text-ink/70'>{C.label}</h2>
-          <p className={`mt-1 font-mono text-xl font-medium ${C.color}`}>{formatCurrency(C.value)}</p>
+          <p className={`mt-1 font-mono text-md md:text-xl font-medium ${C.color}`}>{formatCurrency(C.value)}</p>
         </div>
       ))}
     </div>

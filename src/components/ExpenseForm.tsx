@@ -66,7 +66,7 @@ function ExpenseForm(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border-line bg-white/60 p-5'>
+      <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border border-line bg-white/60 p-5'>
         <div className='flex gap-2'>
           {EXPENSE_TYPE_OPTIONS.map((option) => {
             const isActive = form.type === option.value

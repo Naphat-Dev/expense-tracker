@@ -5,6 +5,8 @@ import SummaryCards from './components/SummaryCards'
 import ExpenseList from './components/ExpenseList/ExpenseList'
 import { v4 as uuid } from 'uuid'
 import { toCents } from './utils/format'
+import ExpenseFilters from './components/ExpenseFilters'
+
 
 
 
@@ -65,9 +67,11 @@ function App() {
 
         <div>
           <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
+          <ExpenseFilters />
           <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
         </div>
       </main>
+      
     </div>
   )
 
