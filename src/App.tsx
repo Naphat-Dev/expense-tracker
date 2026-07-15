@@ -6,15 +6,22 @@ import ExpenseList from './components/ExpenseList/ExpenseList'
 import { v4 as uuid } from 'uuid'
 import { toCents } from './utils/format'
 import ExpenseFilters from './components/ExpenseFilters'
-
-
-
-
+import { filterExpenses, type ExpenseFiltersState } from './utils/ExpenseFilters'
 import './App.css'
+
+
+const DEFAULT_FILTERS: ExpenseFiltersState = {
+    search: '',
+    type: 'all',
+    category: 'all',
+    timeRange: 'all',
+    sort: 'date-desc',
+}
 
 function App() {
   const [expenses, setExpense] = useState<Expense[]>([])
-
+  const [filters, setFilters] = useState(DEFAULT_FILTERS)
+  
   const addExpense = (draft: ExpenseDraft) => {
     const newExpense: Expense = {
       ...draft,
@@ -52,6 +59,10 @@ function App() {
     }
   }, [expenses])
 
+  const filteredExpenses = useMemo(() => {
+    return filterExpenses(expenses, filters)
+  }, [expenses, filters])
+
 
   return (
     <div className='bg-gray-100 min-h-screen px-4 py-10 sm:px-8 '>
@@ -67,8 +78,8 @@ function App() {
 
         <div>
           <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
-          <ExpenseFilters />
-          <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
+          <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS}/>
+          <ExpenseList expenses={filteredExpenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
         </div>
       </main>
       

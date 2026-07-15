@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { FiSearch } from "react-icons/fi";
 
 const EXPENSE_TYPE_OPTIONS = [
@@ -35,16 +34,9 @@ const SORT_OPTIONS = [
 
 const SELECT_CLASS = 'rounded-lg border border-line bg-white/80 px-2 py-1 text-xs text-ink outline-none focus:border-sage'
 
-const DEFAULT_FILTERS = {
-    search: '',
-    type: 'all',
-    category: 'all',
-    timeRange: 'all',
-    sort: 'date-desc',
-}
 
-function ExpenseFilters() {
-    const [filters, setFilters] = useState(DEFAULT_FILTERS)
+function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }) {
+
 
     const updateFilter = (key, value) => {
         setFilters((prev) => ({ ...prev, [key]: value }))
