@@ -3,6 +3,8 @@ import { formatDate, formatCurrency } from '../../utils/format';
 import { LucideEdit, LucideTrash } from 'lucide-react';
 import { CATEGORIES } from '../../types/expense';
 
+const FIELD_CLASS =
+    'min-w-0 rounded border border-line bg-white px-2 py-1 text-sm text-ink outline-none focus:border-sage';
 
 
 function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
@@ -47,7 +49,8 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                                 name="category"
                                 id="category"
                                 value={draft.category}
-                                onChange={(e) => updateField('category', e.target.value)}>
+                                onChange={(e) => updateField('category', e.target.value)}
+                                className={`${FIELD_CLASS} w-full`}>
 
                                 {CATEGORIES.map((category) => (
                                     <option key={category} value={category}>
@@ -58,30 +61,37 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                             <input
                                 type="text"
                                 value={draft.note}
-                                onChange={(e) => updateField('note', e.target.value)} />
+                                onChange={(e) => updateField('note', e.target.value)}
+                                className={`${FIELD_CLASS} w-full`}
+                                placeholder='โน้ต (รายละเอียด)'
+                                />
+
                         </div>
                         <div className="text-sm font-medium text-ink/50">
                             <input
                                 type="date"
                                 value={draft.date}
-                                onChange={(e) => updateField('date', e.target.value)} />
+                                onChange={(e) => updateField('date', e.target.value)}
+                                className={`${FIELD_CLASS} mt-1`}/>
                         </div>
                     </div>
                     <div className='flex items-center gap-3'>
-                        <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
+                        <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-red-400'} `}>
                             {type === 'income' ? '+' : '-'}
                             <input
                                 type="number"
                                 value={draft.amount}
-                                onChange={amountHandler} />
+                                onChange={amountHandler} 
+                                className={`${FIELD_CLASS} w-20`}/>
                         </div>
                         <select
                             name="type"
                             id="type"
                             value={draft.type}
                             onChange={(e) => updateField('type', e.target.value)}>
-                            <option value="expense">Expense</option>
-                            <option value="income">Income</option>
+                            className={`${FIELD_CLASS} w-20`}    
+                            <option value="expense">รายจ่าย</option>
+                            <option value="income">รายรับ</option>
                         </select>
                         <button onClick={saveHandler} className="text-ink/30 transition hover:text-ink">Save</button>
                         <button onClick={() => setEditMode(false)} className="text-ink/30 transition hover:text-ink">Cancel</button>

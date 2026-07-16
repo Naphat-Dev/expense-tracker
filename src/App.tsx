@@ -8,20 +8,21 @@ import { toCents } from './utils/format'
 import ExpenseFilters from './components/ExpenseFilters'
 import { filterExpenses, type ExpenseFiltersState } from './utils/ExpenseFilters'
 import './App.css'
+import Swal from 'sweetalert2'
 
 
 const DEFAULT_FILTERS: ExpenseFiltersState = {
-    search: '',
-    type: 'all',
-    category: 'all',
-    timeRange: 'all',
-    sort: 'date-desc',
+  search: '',
+  type: 'all',
+  category: 'all',
+  timeRange: 'all',
+  sort: 'date-desc',
 }
 
 function App() {
   const [expenses, setExpense] = useState<Expense[]>([])
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
-  
+
   const addExpense = (draft: ExpenseDraft) => {
     const newExpense: Expense = {
       ...draft,
@@ -32,7 +33,21 @@ function App() {
   }
 
   const deleteExpense = (id: string) => {
-    setExpense(expenses.filter((e) => e.id !== id))
+    Swal.fire({
+      title: 'คุณต้องการลบรายการนี้ใช่หรือไม่?',
+      text: "คุณไม่สามารถกู้คืนได้!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ลบ',
+      cancelButtonText: 'ยกเลิก',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setExpense(expenses.filter((e) => e.id !== id))
+      }
+    })
+
   }
 
   const updateExpense = (id: string, draft: ExpenseDraft) => {
@@ -43,11 +58,15 @@ function App() {
     setExpense(expenses.map((e) => (e.id === id ? updatedExpense : e)))
   }
 
+  const filteredExpenses = useMemo(() => {
+    return filterExpenses(expenses, filters)
+  }, [expenses, filters])
+
   const summary = useMemo(() => {
     let incomeCents = 0
     let expenseCents = 0
 
-    for (const e of expenses) {
+    for (const e of filteredExpenses) {
       if (e.type === 'income') incomeCents += toCents(e.amount)
       else expenseCents += toCents(e.amount)
     }
@@ -57,11 +76,7 @@ function App() {
       expense: expenseCents / 100,
       balance: (incomeCents - expenseCents) / 100,
     }
-  }, [expenses])
-
-  const filteredExpenses = useMemo(() => {
-    return filterExpenses(expenses, filters)
-  }, [expenses, filters])
+  }, [filteredExpenses])
 
 
   return (
@@ -71,18 +86,18 @@ function App() {
         <h1 className='font-display text-3xl font-semibold text-ink'>บันทึกรายรับ-รายจ่าย</h1>
       </header>
 
-      <main className='mx-auto max-w-5xl grid gap-6 lg:grid-cols-[360px_1fr]'>
+      <main className='mx-auto max-w-5xl w-full grid gap-6 lg:grid-cols-[360px_1fr]'>
         <div>
           <ExpenseForm addExpense={addExpense} />
         </div>
 
         <div>
           <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
-          <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS}/>
+          <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
           <ExpenseList expenses={filteredExpenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
         </div>
       </main>
-      
+
     </div>
   )
 
