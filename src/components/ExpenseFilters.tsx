@@ -1,4 +1,5 @@
 import { FiSearch } from "react-icons/fi";
+import type { ExpenseFiltersState } from "../types/filter";
 
 const EXPENSE_TYPE_OPTIONS = [
     { value: 'all', label: 'ทั้งหมด', activeClass: 'bg-ink/10 text-ink' },
@@ -26,27 +27,34 @@ const TIME_RANGE_OPTIONS = [
 ]
 
 const SORT_OPTIONS = [
-    { value: 'date-desc', label: 'ใหม่ → เก่า' },
     { value: 'date-asc', label: 'เก่า → ใหม่' },
+    { value: 'date-desc', label: 'ใหม่ → เก่า' },
     { value: 'amount-desc', label: 'เงิน มาก → น้อย' },
     { value: 'amount-asc', label: 'เงิน น้อย → มาก' },
 ]
 
 const SELECT_CLASS = 'rounded-lg border border-line bg-white/80 px-2 py-1 text-xs text-ink outline-none focus:border-sage'
 
+type ExpenseFiltersProps = {
+    filters: ExpenseFiltersState
+    setFilters: React.Dispatch<
+      React.SetStateAction<ExpenseFiltersState>
+    >
+    DEFAULT_FILTERS: ExpenseFiltersState
+  }
 
-function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }) {
+function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFiltersProps) {
 
 
-    const updateFilter = (key, value) => {
+    const updateFilter = (key: keyof ExpenseFiltersState, value: string) => {
         setFilters((prev) => ({ ...prev, [key]: value }))
     }
 
     const hasActiveFilters = Object.entries(DEFAULT_FILTERS).some(
-        ([key, value]) => filters[key] !== value
+        ([key, value]) => filters[key as keyof ExpenseFiltersState] !== value
     )
 
-    const resetFilters = () => setFilters(DEFAULT_FILTERS)
+    const resetFilters = () => setFilters(DEFAULT_FILTERS as unknown as ExpenseFiltersState)
 
     return (
         <div className='mt-4 rounded-2xl border border-line bg-white/60 p-3'>

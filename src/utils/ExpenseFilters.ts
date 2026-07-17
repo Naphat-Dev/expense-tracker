@@ -1,13 +1,6 @@
 import type { Expense } from '../types/expense'
 import { todayISO } from './format'
-
-export interface ExpenseFiltersState {
-  search: string
-  type: 'all' | 'income' | 'expense'
-  category: string
-  timeRange: string
-  sort: string
-}
+import type { ExpenseFiltersState } from '../types/filter'
 
 const CATEGORY_MAP: Record<string, string> = {
   food: 'อาหาร',
@@ -63,15 +56,15 @@ function sortExpenses(expenses: Expense[], sort: string): Expense[] {
   const sorted = [...expenses]
 
   switch (sort) {
-    case 'date-asc':
-      return sorted.sort((a, b) => a.date.localeCompare(b.date))
+    case 'date-desc':
+      return sorted.sort((a, b) => b.date.localeCompare(a.date))
     case 'amount-desc':
       return sorted.sort((a, b) => b.amount - a.amount)
     case 'amount-asc':
       return sorted.sort((a, b) => a.amount - b.amount)
-    case 'date-desc':
+    case 'date-asc':
     default:
-      return sorted.sort((a, b) => b.date.localeCompare(a.date))
+      return sorted.sort((a, b) => a.date.localeCompare(b.date))
   }
 }
 

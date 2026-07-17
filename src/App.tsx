@@ -6,7 +6,8 @@ import ExpenseList from './components/ExpenseList/ExpenseList'
 import { v4 as uuid } from 'uuid'
 import { toCents } from './utils/format'
 import ExpenseFilters from './components/ExpenseFilters'
-import { filterExpenses, type ExpenseFiltersState } from './utils/ExpenseFilters'
+import { filterExpenses } from './utils/ExpenseFilters'
+import type { ExpenseFiltersState } from './types/filter'
 import './App.css'
 import Swal from 'sweetalert2'
 
@@ -16,7 +17,7 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
   type: 'all',
   category: 'all',
   timeRange: 'all',
-  sort: 'date-desc',
+  sort: 'date-asc',
 }
 
 function App() {

@@ -2,21 +2,31 @@ import React, { useState } from 'react';
 import { formatDate, formatCurrency } from '../../utils/format';
 import { LucideEdit, LucideTrash } from 'lucide-react';
 import { CATEGORIES } from '../../types/expense';
+import type { Expense, ExpenseDraft } from '../../types/expense';
+
+
+type ExpenseItemProps = {
+    expenses: Expense
+    deleteExpense: (id: string) => void
+    updateExpense: (id: string, draft: ExpenseDraft) => void
+}
 
 const FIELD_CLASS =
-    'min-w-0 rounded border border-line bg-white px-2 py-1 text-sm text-ink outline-none focus:border-sage';
+    'min-w-0 rounded border border-line bg-white px-2 py-1 text-sm outline-none focus:border-sage';
 
 
-function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
+function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps ) {
 
     const { id, type, amount, date, category, note } = expenses;
 
     const [editMode, setEditMode] = useState(false);
 
     // รวมทุก field ที่แก้ไขได้ไว้ใน object เดียว
-    const [draft, setDraft] = useState({ category, note, amount, date, type })
+    const [draft, setDraft] = useState<ExpenseDraft>({ category, note, amount, date, type })
 
-    const updateField = (fieldName, value) => {
+    const updateField = (
+        fieldName: keyof ExpenseDraft, 
+        value: ExpenseDraft[keyof ExpenseDraft]) => {
         setDraft((prev) => ({ ...prev, [fieldName]: value }))
     }
 
@@ -30,7 +40,8 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
         setEditMode(false)
     }
 
-    const amountHandler = (e) => {
+    const amountHandler = (
+        e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value
 
         // ตัดเลข 0 นำหน้าออก แต่เก็บกรณี "0" เดี่ยวๆ หรือ "0.xx" ไว้
@@ -76,7 +87,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                         </div>
                     </div>
                     <div className='flex items-center gap-3'>
-                        <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-red-400'} `}>
+                        <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
                             {type === 'income' ? '+' : '-'}
                             <input
                                 type="number"
@@ -88,8 +99,8 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                             name="type"
                             id="type"
                             value={draft.type}
-                            onChange={(e) => updateField('type', e.target.value)}>
-                            className={`${FIELD_CLASS} w-20`}    
+                            onChange={(e) => updateField('type', e.target.value)}
+                            className={`${FIELD_CLASS} w-20`}>
                             <option value="expense">รายจ่าย</option>
                             <option value="income">รายรับ</option>
                         </select>
@@ -113,7 +124,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }) {
                     <div className="text-sm font-medium text-ink/50">{formatDate(date)}</div>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <div className={`text-sm font-mono font-medium text-ink text-center ${type === 'income' ? 'text-sage' : 'text-red-400'} `}>
+                    <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
                         {type === 'income' ? '+' : '-'}{formatCurrency(amount)}
                     </div>
                     <button onClick={editHandler} className="text-ink/30 transition hover:text-ink"><LucideEdit /></button>

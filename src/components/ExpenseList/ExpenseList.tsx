@@ -1,10 +1,15 @@
-import React from 'react';
 import ExpenseItem from './ExpenseItem';
+import type { Expense, ExpenseDraft } from '../../types/expense';
 
+type ExpenseListProps = {
+    expenses: Expense[]
+    deleteExpense: (id: string) => void
+    updateExpense: (id: string, draft: ExpenseDraft) => void
+  }
 
-function ExpenseList(props) {
+function ExpenseList({ expenses, deleteExpense, updateExpense }: ExpenseListProps) {
 
-    const expensesList = props.expenses;
+    const expensesList = expenses;
 
     if (expensesList.length === 0) {
         return (
@@ -16,7 +21,7 @@ function ExpenseList(props) {
 
     return (
         <div className='mt-5'>{expensesList.map((item) =>
-            <ExpenseItem deleteExpense={props.deleteExpense} updateExpense={props.updateExpense} key={item.id} expenses={item} />)}</div>
+            <ExpenseItem deleteExpense={deleteExpense} updateExpense={updateExpense} key={item.id} expenses={item} />)}</div>
     );
 }
 
