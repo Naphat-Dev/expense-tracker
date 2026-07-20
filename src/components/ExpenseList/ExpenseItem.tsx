@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDate, formatCurrency } from '../../utils/format';
+import { formatDate, formatCurrencyCompact } from '../../utils/format';
 import { LucideEdit, LucideTrash } from 'lucide-react';
 import { CATEGORIES } from '../../types/expense';
 import type { Expense, ExpenseDraft } from '../../types/expense';
@@ -47,6 +47,9 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
         // ตัดเลข 0 นำหน้าออก แต่เก็บกรณี "0" เดี่ยวๆ หรือ "0.xx" ไว้
         value = value.replace(/^0+(?=\d)/, '')
 
+        // ตรวจสอบว่า value เป็นตัวเลขหรือไม่
+        if (!/^\d*\.?\d{0,2}$/.test(value)) return
+
         updateField('amount', value)
     }
 
@@ -90,7 +93,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
                         <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
                             {type === 'income' ? '+' : '-'}
                             <input
-                                type="number"
+                                type="text"
                                 value={draft.amount}
                                 onChange={amountHandler} 
                                 className={`${FIELD_CLASS} w-20`}/>
@@ -125,7 +128,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
                 </div>
                 <div className='flex items-center gap-3'>
                     <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
-                        {type === 'income' ? '+' : '-'}{formatCurrency(amount)}
+                        {type === 'income' ? '+' : '-'}{formatCurrencyCompact(amount)}
                     </div>
                     <button onClick={editHandler} className="text-ink/30 transition hover:text-ink"><LucideEdit /></button>
                     <button onClick={() => deleteExpense(id)} className="text-ink/30 transition hover:text-clay"><LucideTrash /></button>

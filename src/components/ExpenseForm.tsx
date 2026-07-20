@@ -60,6 +60,9 @@ function ExpenseForm(props) {
     // ตัดเลข 0 นำหน้าออก แต่เก็บกรณี "0" เดี่ยวๆ หรือ "0.xx" ไว้
     value = value.replace(/^0+(?=\d)/, '')
 
+    // ตรวจสอบว่า value เป็นตัวเลขหรือไม่
+    if (!/^\d*\.?\d{0,2}$/.test(value)) return
+
     updateField('amount', value)
 
   }
@@ -93,13 +96,12 @@ function ExpenseForm(props) {
               className='w-full rounded-lg border border-line px-2 py-1 outline-none focus:border-sage'
               placeholder='0.00'
               inputMode='decimal'
-              type="number"
+              type="text"
               id="expense-amount"
               min="0"
-              step="0.01"
-              required
               value={form.amount}
               onChange={handleChange}
+              required
             />
           </div>
           <div className='flex flex-col gap-2'>
