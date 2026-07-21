@@ -44,7 +44,7 @@ export function formatCurrencyCompact(amount: number): string {
         minimumFractionDigits: 0,
       }).format(scaled)
 
-      return `${sign}${formatted} ${unit.label} ฿`
+      return `${sign}฿${formatted} ${unit.label}`
     }
   }
 

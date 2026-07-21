@@ -27,8 +27,8 @@ const TIME_RANGE_OPTIONS = [
 ]
 
 const SORT_OPTIONS = [
-    { value: 'date-asc', label: 'เก่า → ใหม่' },
     { value: 'date-desc', label: 'ใหม่ → เก่า' },
+    { value: 'date-asc', label: 'เก่า → ใหม่' },
     { value: 'amount-desc', label: 'เงิน มาก → น้อย' },
     { value: 'amount-asc', label: 'เงิน น้อย → มาก' },
 ]

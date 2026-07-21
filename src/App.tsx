@@ -17,7 +17,7 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
   type: 'all',
   category: 'all',
   timeRange: 'all',
-  sort: 'date-asc',
+  sort: 'date-desc',
 }
 
 function App() {
