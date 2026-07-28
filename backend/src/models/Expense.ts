@@ -15,7 +15,7 @@ const expenseSchema = new Schema(
         },
 
         date: {
-            type: String,
+            type: Date,
             required: true
         },
 
@@ -37,6 +37,7 @@ const expenseSchema = new Schema(
             type: String,
             default: ''
         },
+        
     },
     { timestamps: true }
 )

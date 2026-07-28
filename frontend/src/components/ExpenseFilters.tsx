@@ -62,7 +62,7 @@ function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFilters
                 <FiSearch className='absolute left-2.5 top-1/2 -translate-y-1/2 text-ink/40' size={15} />
                 <input
                     type="search"
-                    placeholder="ค้นหาชื่อหรือโน็ต..."
+                    placeholder="ค้นหาหมวดหมู่หรือโน็ต..."
                     value={filters.search}
                     onChange={(e) => updateFilter('search', e.target.value)}
                     className='w-full rounded-lg border border-line bg-white/80 py-1.5 pl-8 pr-3 text-sm outline-none focus:border-sage'
