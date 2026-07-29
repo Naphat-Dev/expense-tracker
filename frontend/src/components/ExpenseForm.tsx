@@ -50,7 +50,7 @@ function ExpenseForm(props) {
     // console.log(form)
     props.addExpense(newdata);
 
-    setForm({ date: form.date, ...INITIAL_FORM })
+    setForm({ ...INITIAL_FORM, date: form.date, type: form.type })
     setErr(null)
   }
 
