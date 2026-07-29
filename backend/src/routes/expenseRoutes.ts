@@ -9,14 +9,13 @@ import { getExpensesByFilter } from '../controllers/expenseController';
 
 const router = express.Router();
 router.get('/', getAllExpenses);
+router.get('/summary', getSummary);
+router.get('/filter', getExpensesByFilter);
 router.get('/:id', getExpenseById);
 router.post('/', createExpense);
 router.put('/:id', updateExpense);
 router.delete('/:id', deleteExpense);
-router.get('/summary', getSummary);
-router.get('/filter', getExpensesByFilter);
-// GET      /dashboard       Dashboard
-// GET      /report          รายงานรายเดือน
+
 
 
 

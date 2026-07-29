@@ -1,13 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Expense, ExpenseDraft } from './types/expense'
 import ExpenseForm from './components/ExpenseForm'
 import SummaryCards from './components/SummaryCards'
 import ExpenseList from './components/ExpenseList/ExpenseList'
-import { v4 as uuid } from 'uuid'
 import { toCents } from './utils/format'
 import ExpenseFilters from './components/ExpenseFilters'
 import { filterExpenses } from './utils/ExpenseFilters'
 import type { ExpenseFiltersState } from './types/filter'
+import {
+  createExpense,
+  deleteExpenseApi,
+  fetchExpenses,
+  updateExpenseApi,
+} from './api/expenses'
 import './App.css'
 import Swal from 'sweetalert2'
 
@@ -23,14 +28,39 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
 function App() {
   const [expenses, setExpense] = useState<Expense[]>([])
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
-  const addExpense = (draft: ExpenseDraft) => {
-    const newExpense: Expense = {
-      ...draft,
-      id: uuid(),
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        setLoadError(null)
+        const data = await fetchExpenses()
+        if (!cancelled) setExpense(data)
+      } catch (err) {
+        if (!cancelled) {
+          setLoadError(
+            err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
+          )
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
     }
-    setExpense([...expenses, newExpense])
-    console.log(newExpense)
+  }, [])
+
+  const addExpense = async (draft: ExpenseDraft) => {
+    try {
+      const newExpense = await createExpense(draft)
+      setExpense((prev) => [...prev, newExpense])
+    } catch (err) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'บันทึกไม่สำเร็จ',
+        text: err instanceof Error ? err.message : 'เกิดข้อผิดพลาด',
+      })
+    }
   }
 
   const deleteExpense = (id: string) => {
@@ -43,20 +73,36 @@ function App() {
       cancelButtonColor: '#d33',
       confirmButtonText: 'ลบ',
       cancelButtonText: 'ยกเลิก',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setExpense(expenses.filter((e) => e.id !== id))
+        try {
+          await deleteExpenseApi(id)
+          setExpense((prev) => prev.filter((e) => e.id !== id))
+        } catch (err) {
+          await Swal.fire({
+            icon: 'error',
+            title: 'ลบไม่สำเร็จ',
+            text: err instanceof Error ? err.message : 'เกิดข้อผิดพลาด',
+          })
+        }
       }
     })
 
   }
 
-  const updateExpense = (id: string, draft: ExpenseDraft) => {
-    const updatedExpense: Expense = {
-      ...draft,
-      id,
+  const updateExpense = async (id: string, draft: ExpenseDraft) => {
+    try {
+      const updatedExpense = await updateExpenseApi(id, draft)
+      setExpense((prev) =>
+        prev.map((e) => (e.id === id ? updatedExpense : e)),
+      )
+    } catch (err) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'แก้ไขไม่สำเร็จ',
+        text: err instanceof Error ? err.message : 'เกิดข้อผิดพลาด',
+      })
     }
-    setExpense(expenses.map((e) => (e.id === id ? updatedExpense : e)))
   }
 
   const filteredExpenses = useMemo(() => {
@@ -86,6 +132,12 @@ function App() {
         <p className="font-mono text-xs uppercase tracking-widest text-sage">Ledger</p>
         <h1 className='font-display text-3xl font-semibold text-ink'>บันทึกรายรับ-รายจ่าย</h1>
       </header>
+
+      {loadError ? (
+        <p className="mx-auto mb-4 max-w-5xl rounded-lg border border-clay/40 bg-white px-4 py-3 text-sm text-clay">
+          {loadError} — ตรวจว่า backend รันอยู่ (port 3000) และ MongoDB เชื่อมต่อได้
+        </p>
+      ) : null}
 
       <main className='mx-auto max-w-5xl w-full grid gap-6 lg:grid-cols-[360px_1fr]'>
         <div>
