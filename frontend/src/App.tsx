@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
-import type { Expense, ExpenseDraft } from './types/expense'
+import { useEffect, useState } from 'react'
+import type { Expense, ExpenseDraft, ExpenseSummary } from './types/expense'
 import ExpenseForm from './components/ExpenseForm'
 import SummaryCards from './components/SummaryCards'
 import ExpenseList from './components/ExpenseList/ExpenseList'
-import { toCents } from './utils/format'
 import ExpenseFilters from './components/ExpenseFilters'
-import { filterExpenses } from './utils/ExpenseFilters'
 import type { ExpenseFiltersState } from './types/filter'
 import {
   createExpense,
   deleteExpenseApi,
-  fetchExpenses,
+  fetchExpenseSummary,
+  fetchExpensesByFilter,
   updateExpenseApi,
 } from './api/expenses'
 import './App.css'
@@ -25,35 +24,74 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
   sort: 'date-desc',
 }
 
+const EMPTY_SUMMARY: ExpenseSummary = { income: 0, expense: 0, balance: 0 }
+
 function App() {
   const [expenses, setExpense] = useState<Expense[]>([])
+  const [summary, setSummary] = useState<ExpenseSummary>(EMPTY_SUMMARY)
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [loadError, setLoadError] = useState<string | null>(null)
 
+  // useEffect(() => {
+  //   let cancelled = false
+  //     ; (async () => {
+  //       try {
+  //         setLoadError(null)
+  //         const data = await fetchExpenses()
+  //         if (!cancelled) setExpense(data)
+  //       } catch (err) {
+  //         if (!cancelled) {
+  //           setLoadError(
+  //             err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
+  //           )
+  //         }
+  //       }
+  //     })()
+  //   return () => {
+  //     cancelled = true
+  //   }
+  // }, [])
+
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
-      try {
-        setLoadError(null)
-        const data = await fetchExpenses()
-        if (!cancelled) setExpense(data)
-      } catch (err) {
-        if (!cancelled) {
-          setLoadError(
-            err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
-          )
+      ; (async () => {
+        try {
+          const data = await fetchExpenseSummary()
+          if (!cancelled) setSummary(data)
+        } catch {
+          if (!cancelled) setSummary(EMPTY_SUMMARY)
         }
-      }
-    })()
+      })()
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [expenses])
+
+  useEffect(() => {
+    let cancelled = false
+      ; (async () => {
+        try {
+          setLoadError(null)
+          const data = await fetchExpensesByFilter(filters)
+          if (!cancelled) setExpense(data)
+        } catch (err) {
+          if (!cancelled) {
+            setLoadError(
+              err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
+            )
+          }
+        }
+      })()
+    return () => {
+      cancelled = true
+    }
+  }, [filters])
 
   const addExpense = async (draft: ExpenseDraft) => {
     try {
-      const newExpense = await createExpense(draft)
-      setExpense((prev) => [...prev, newExpense])
+      await createExpense(draft)
+      const data = await fetchExpensesByFilter(filters)
+      setExpense(data)
     } catch (err) {
       await Swal.fire({
         icon: 'error',
@@ -77,7 +115,8 @@ function App() {
       if (result.isConfirmed) {
         try {
           await deleteExpenseApi(id)
-          setExpense((prev) => prev.filter((e) => e.id !== id))
+          const data = await fetchExpensesByFilter(filters)
+          setExpense(data)
         } catch (err) {
           await Swal.fire({
             icon: 'error',
@@ -92,10 +131,9 @@ function App() {
 
   const updateExpense = async (id: string, draft: ExpenseDraft) => {
     try {
-      const updatedExpense = await updateExpenseApi(id, draft)
-      setExpense((prev) =>
-        prev.map((e) => (e.id === id ? updatedExpense : e)),
-      )
+      await updateExpenseApi(id, draft)
+      const data = await fetchExpensesByFilter(filters)
+      setExpense(data)
     } catch (err) {
       await Swal.fire({
         icon: 'error',
@@ -104,26 +142,6 @@ function App() {
       })
     }
   }
-
-  const filteredExpenses = useMemo(() => {
-    return filterExpenses(expenses, filters)
-  }, [expenses, filters])
-
-  const summary = useMemo(() => {
-    let incomeCents = 0
-    let expenseCents = 0
-
-    for (const e of filteredExpenses) {
-      if (e.type === 'income') incomeCents += toCents(e.amount)
-      else expenseCents += toCents(e.amount)
-    }
-
-    return {
-      income: incomeCents / 100,
-      expense: expenseCents / 100,
-      balance: (incomeCents - expenseCents) / 100,
-    }
-  }, [filteredExpenses])
 
 
   return (
@@ -147,7 +165,7 @@ function App() {
         <div>
           <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
           <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
-          <ExpenseList expenses={filteredExpenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
+          <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
         </div>
       </main>
 

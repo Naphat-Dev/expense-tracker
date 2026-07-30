@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { CATEGORIES, type Expense, type ExpenseDraft } from '../types/expense'
+import { CATEGORIES, type Expense, type ExpenseDraft, type ExpenseSummary } from '../types/expense'
+import type { ExpenseFiltersState } from '../types/filter'
 
 const API_BASE = import.meta.env.VITE_API_URL ?? ''
 const DEFAULT_TIMEOUT_MS = 10_000
@@ -14,6 +15,12 @@ const ExpenseApiDocSchema = z.object({
   date: z.string(),
   category: z.enum(CATEGORIES),
   note: z.string().optional(),
+})
+
+const SummarySchema = z.object({
+  income: z.number(),
+  expense: z.number(),
+  balance: z.number(),
 })
 
 // ---------- Mapper ----------
@@ -137,6 +144,26 @@ export async function updateExpenseApi(
     ...jsonBody(draft),
   })
   return toExpense(data)
+}
+
+/** สรุปรายรับ-รายจ่ายทั้งหมด */
+export async function fetchExpenseSummary(): Promise<ExpenseSummary> {
+  const data = await apiFetch<unknown>('/api/expenses/summary')
+  return SummarySchema.parse(data)
+}
+
+/** ดึงรายการตามเงื่อนไข */
+export async function fetchExpensesByFilter(
+  filters: ExpenseFiltersState,
+): Promise<Expense[]> {
+  const params = new URLSearchParams(
+    Object.entries(filters).reduce((acc, [key, value]) => {
+      acc[key] = String(value)
+      return acc
+    }, {} as Record<string, string>),
+  )
+  const data = await apiFetch<unknown[]>(`/api/expenses/filter?${params}`)
+  return data.map(toExpense)
 }
 
 /** ลบรายการ */

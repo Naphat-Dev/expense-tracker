@@ -23,3 +23,9 @@ export interface Expense {
 }
 
 export type ExpenseDraft = Omit<Expense, 'id'>
+
+export interface ExpenseSummary {
+    income: number
+    expense: number
+    balance: number
+}

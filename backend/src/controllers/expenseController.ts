@@ -214,20 +214,20 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
         switch (sort) {
 
             case "date-asc":
-                query = query.sort({ date: 1 });
-                break;
+                query = query.sort({ date: 1, _id: 1 })
+                break
 
             case "amount-desc":
-                query = query.sort({ amount: -1 });
-                break;
+                query = query.sort({ amount: -1, _id: -1 })
+                break
 
             case "amount-asc":
-                query = query.sort({ amount: 1 });
-                break;
+                query = query.sort({ amount: 1, _id: 1 })
+                break
 
             case "date-desc":
             default:
-                query = query.sort({ date: -1 });
+                query = query.sort({ date: -1, _id: -1 })
         }
 
         const expenses = await query;

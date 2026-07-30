@@ -54,7 +54,7 @@ function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFilters
         ([key, value]) => filters[key as keyof ExpenseFiltersState] !== value
     )
 
-    const resetFilters = () => setFilters(DEFAULT_FILTERS as unknown as ExpenseFiltersState)
+    const resetFilters = () => setFilters(DEFAULT_FILTERS)
 
     return (
         <div className='mt-4 rounded-2xl border border-line bg-white/60 p-3'>
