@@ -22,13 +22,7 @@ const expenseSchema = new Schema(
         category: {
             type: String,
             enum: [
-                'อาหาร',
-                'เดินทาง',
-                'ที่พัก',
-                'บันเทิง',
-                'สุขภาพ',
-                'เงินเดือน',
-                'อื่นๆ',
+                'food', 'travel', 'accommodation', 'entertainment', 'health', 'salary', 'other'
             ],
             required: true
         },
@@ -37,7 +31,7 @@ const expenseSchema = new Schema(
             type: String,
             default: ''
         },
-        
+
     },
     { timestamps: true }
 )

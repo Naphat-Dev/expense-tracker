@@ -90,6 +90,7 @@ async function apiFetch<T>(
   try {
     const res = await fetch(`${API_BASE}${path}`, {
       ...options,
+      cache: 'no-store',
       signal: controller.signal,
     })
     return await parseResponse<T>(res)
@@ -100,7 +101,6 @@ async function apiFetch<T>(
     if (err instanceof ApiError) {
       throw err
     }
-    // network error, JSON parse error, zod validation error ฯลฯ
     throw new ApiError(
       err instanceof Error ? err.message : 'Unknown error',
       0,

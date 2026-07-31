@@ -94,6 +94,16 @@ export const deleteExpense = async (req: Request, res: Response) => {
     }
 };
 
+export const deleteAllExpenses = async (req: Request, res: Response) => {
+    try {
+        await Expense.deleteMany();
+        res.status(200).json({ message: "All expenses deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to delete all expenses" });
+    }
+};
+
 export const getSummary = async (req: Request, res: Response) => {
     try {
         const expenses = await Expense.find();
@@ -164,47 +174,37 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
         if (timeRange && timeRange !== "all") {
 
             const now = new Date();
-
             let startDate: Date;
+            let endDate: Date;
 
             switch (timeRange) {
 
                 case "today":
-                    startDate = new Date(
-                        now.getFullYear(),
-                        now.getMonth(),
-                        now.getDate()
-                    );
+                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
                     break;
 
                 case "7days":
-                    startDate = new Date();
-                    startDate.setDate(now.getDate() - 7);
+                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+                    endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
                     break;
 
                 case "thismonth":
-                    startDate = new Date(
-                        now.getFullYear(),
-                        now.getMonth(),
-                        1
-                    );
+                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                     break;
 
                 case "thisyear":
-                    startDate = new Date(
-                        now.getFullYear(),
-                        0,
-                        1
-                    );
+                    startDate = new Date(now.getFullYear(), 0, 1);
+                    endDate = new Date(now.getFullYear() + 1, 0, 1);
                     break;
 
                 default:
                     startDate = new Date(0);
+                    endDate = new Date();
             }
 
-            filter.date = {
-                $gte: startDate.toISOString().split("T")[0],
-            };
+            filter.date = { $gte: startDate, $lt: endDate };
         }
 
         // Query

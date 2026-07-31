@@ -68,6 +68,7 @@ function App() {
   }, [expenses])
 
   useEffect(() => {
+    console.log(filters)
     let cancelled = false
       ; (async () => {
         try {

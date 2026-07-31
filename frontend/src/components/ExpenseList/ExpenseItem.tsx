@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { formatDate, formatCurrencyCompact } from '../../utils/format';
 import { LucideEdit, LucideTrash } from 'lucide-react';
-import { CATEGORIES } from '../../types/expense';
+import { CATEGORIES, CATEGORY_LABELS } from '../../types/expense';
 import type { Expense, ExpenseDraft } from '../../types/expense';
 
 
@@ -68,7 +68,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
 
                                 {CATEGORIES.map((category) => (
                                     <option key={category} value={category}>
-                                        {category}
+                                        {CATEGORY_LABELS[category]}
                                     </option>
                                 ))}
                             </select>
@@ -121,7 +121,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
             <div className='flex justify-between items-center'>
                 <div className='flex flex-col'>
                     <div className="flex items-center gap-2 text-sm font-medium text-ink">
-                        {category}
+                        {CATEGORY_LABELS[category]}
                         {note && <div className="text-sm font-medium text-ink">· {note}</div>}
                     </div>
                     <div className="text-sm font-medium text-ink/50">{formatDate(date)}</div>

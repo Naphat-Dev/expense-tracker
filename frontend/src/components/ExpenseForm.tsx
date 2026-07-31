@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useState } from 'react'
-import { CATEGORIES } from '../types/expense'
+import { CATEGORIES, CATEGORY_LABELS } from '../types/expense'
 import { todayISO } from '../utils/format'
 
 const INITIAL_FORM = {
@@ -126,7 +126,7 @@ function ExpenseForm(props) {
             onChange={(e) => updateField('category', e.target.value)}
           >
             {CATEGORIES.map((category) => (
-              <option key={category} value={category}>{category}</option>
+              <option key={category} value={category}>{CATEGORY_LABELS[category]}</option>
             ))}
           </select>
         </div>
