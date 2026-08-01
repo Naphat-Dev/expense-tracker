@@ -25,28 +25,26 @@
 // function matchesTimeRange(expense: Expense, timeRange: string): boolean {
 //   if (timeRange === 'all') return true
 
-//   const expenseDate = new Date(`${expense.date}T00:00:00`)
-//   const today = new Date(`${todayISO()}T00:00:00`)
+//   const today = todayISO()
 
 //   if (timeRange === 'today') {
-//     return expense.date === todayISO()
+//     return expense.date === today
 //   }
 
 //   if (timeRange === '7days') {
-//     const sevenDaysAgo = new Date(today)
-//     sevenDaysAgo.setDate(today.getDate() - 6)
-//     return expenseDate >= sevenDaysAgo && expenseDate <= today
+//     const start = new Date()
+//     start.setDate(start.getDate() - 6)
+//     const startISO = todayISO(start)
+//     return expense.date >= startISO && expense.date <= today
 //   }
 
 //   if (timeRange === 'thismonth') {
-//     return (
-//       expenseDate.getFullYear() === today.getFullYear() &&
-//       expenseDate.getMonth() === today.getMonth()
-//     )
+//     const [y, m] = today.split('-')
+//     return expense.date.startsWith(`${y}-${m}`)
 //   }
 
 //   if (timeRange === 'thisyear') {
-//     return expenseDate.getFullYear() === today.getFullYear()
+//     return expense.date.startsWith(today.slice(0, 4))
 //   }
 
 //   return true

@@ -1,5 +1,6 @@
 import Expense from '../models/Expense';
 import { Request, Response } from 'express';
+import { getTimeRangeBounds } from '../utils/date';
 
 export const getAllExpenses = async (req: Request, res: Response) => {
     try {
@@ -172,38 +173,7 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
 
 
         if (timeRange && timeRange !== "all") {
-
-            const now = new Date();
-            let startDate: Date;
-            let endDate: Date;
-
-            switch (timeRange) {
-
-                case "today":
-                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                    endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                    break;
-
-                case "7days":
-                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
-                    endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                    break;
-
-                case "thismonth":
-                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                    endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-                    break;
-
-                case "thisyear":
-                    startDate = new Date(now.getFullYear(), 0, 1);
-                    endDate = new Date(now.getFullYear() + 1, 0, 1);
-                    break;
-
-                default:
-                    startDate = new Date(0);
-                    endDate = new Date();
-            }
-
+            const { startDate, endDate } = getTimeRangeBounds(String(timeRange));
             filter.date = { $gte: startDate, $lt: endDate };
         }
 
