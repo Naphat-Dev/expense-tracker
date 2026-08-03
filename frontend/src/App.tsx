@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Expense, ExpenseDraft, ExpenseSummary } from './types/expense'
 import ExpenseForm from './components/ExpenseForm'
 import SummaryCards from './components/SummaryCards'
@@ -8,7 +8,6 @@ import type { ExpenseFiltersState } from './types/filter'
 import {
   createExpense,
   deleteExpenseApi,
-  fetchExpenseSummary,
   fetchExpensesByFilter,
   updateExpenseApi,
 } from './api/expenses'
@@ -24,47 +23,19 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
   sort: 'date-desc',
 }
 
-const EMPTY_SUMMARY: ExpenseSummary = { income: 0, expense: 0, balance: 0 }
-
 function App() {
   const [expenses, setExpense] = useState<Expense[]>([])
-  const [summary, setSummary] = useState<ExpenseSummary>(EMPTY_SUMMARY)
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [loadError, setLoadError] = useState<string | null>(null)
 
-  // useEffect(() => {
-  //   let cancelled = false
-  //     ; (async () => {
-  //       try {
-  //         setLoadError(null)
-  //         const data = await fetchExpenses()
-  //         if (!cancelled) setExpense(data)
-  //       } catch (err) {
-  //         if (!cancelled) {
-  //           setLoadError(
-  //             err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
-  //           )
-  //         }
-  //       }
-  //     })()
-  //   return () => {
-  //     cancelled = true
-  //   }
-  // }, [])
-
-  useEffect(() => {
-    let cancelled = false
-      ; (async () => {
-        try {
-          const data = await fetchExpenseSummary()
-          if (!cancelled) setSummary(data)
-        } catch {
-          if (!cancelled) setSummary(EMPTY_SUMMARY)
-        }
-      })()
-    return () => {
-      cancelled = true
-    }
+  const summary = useMemo<ExpenseSummary>(() => {
+    const income = expenses
+      .filter((e) => e.type === 'income')
+      .reduce((sum, e) => sum + e.amount, 0)
+    const expense = expenses
+      .filter((e) => e.type === 'expense')
+      .reduce((sum, e) => sum + e.amount, 0)
+    return { income, expense, balance: income - expense }
   }, [expenses])
 
   useEffect(() => {
