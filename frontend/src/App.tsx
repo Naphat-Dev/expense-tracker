@@ -117,7 +117,7 @@ function App() {
 
 
   return (
-    <div className='bg-gray-100 min-h-screen px-4 py-10 sm:px-8 '>
+    <div className='min-h-screen overflow-x-hidden bg-gray-100 px-4 py-10 sm:px-8'>
       <header className='mx-auto mb-8 max-w-5xl'>
         <p className="font-mono text-xs uppercase tracking-widest text-sage">Ledger</p>
         <h1 className='font-display text-3xl font-semibold text-ink'>บันทึกรายรับ-รายจ่าย</h1>
@@ -129,12 +129,12 @@ function App() {
         </p>
       ) : null}
 
-      <main className='mx-auto max-w-5xl w-full grid gap-6 lg:grid-cols-[360px_1fr]'>
-        <div>
+      <main className='mx-auto grid w-full min-w-0 max-w-5xl gap-6 lg:grid-cols-[360px_1fr]'>
+        <div className="min-w-0">
           <ExpenseForm addExpense={addExpense} />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
           <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
           <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />

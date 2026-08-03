@@ -22,7 +22,7 @@ function ExpenseList({ expenses, deleteExpense, updateExpense }: ExpenseListProp
     }
 
     return (
-        <div className='mt-5'>{expensesList.map((item) =>
+        <div className='mt-5 flex min-w-0 flex-col gap-3'>{expensesList.map((item) =>
             <ExpenseItem
                 key={item.id}
                 expenses={item}

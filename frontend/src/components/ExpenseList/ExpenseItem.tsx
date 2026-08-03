@@ -56,86 +56,104 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
 
     if (isEditing) {
         return (
-            <div className="divide-y divide-line rounded-2xl border border-line bg-white/60 px-6 py-4">
-                <div className='flex justify-between items-center'>
-                    <div className='flex flex-col'>
-                        <div className="flex items-center gap-2 text-sm font-medium text-ink">
-                            <select
-                                name="category"
-                                id="category"
-                                value={draft.category}
-                                onChange={(e) => updateField('category', e.target.value)}
-                                className={`${FIELD_CLASS} w-full`}>
+            <div className="min-w-0 rounded-2xl border border-line bg-white/60 px-4 py-3 sm:px-6 sm:py-4">
+                <div className="flex min-w-0 flex-col gap-3">
+                    <select
+                        name="category"
+                        id={`category-${id}`}
+                        value={draft.category}
+                        onChange={(e) => updateField('category', e.target.value)}
+                        className={`${FIELD_CLASS} w-full`}
+                    >
+                        {CATEGORIES.map((category) => (
+                            <option key={category} value={category}>
+                                {CATEGORY_LABELS[category]}
+                            </option>
+                        ))}
+                    </select>
 
-                                {CATEGORIES.map((category) => (
-                                    <option key={category} value={category}>
-                                        {CATEGORY_LABELS[category]}
-                                    </option>
-                                ))}
-                            </select>
+                    <input
+                        type="text"
+                        value={draft.note}
+                        onChange={(e) => updateField('note', e.target.value)}
+                        className={`${FIELD_CLASS} w-full`}
+                        placeholder="โน้ต (รายละเอียด)"
+                    />
+
+                    <div className="grid grid-cols-2 gap-2">
+                        <input
+                            type="date"
+                            value={draft.date}
+                            onChange={(e) => updateField('date', e.target.value)}
+                            className={`${FIELD_CLASS} w-full min-w-0`}
+                        />
+                        <div className={`flex min-w-0 items-center font-mono text-sm font-medium ${draft.type === 'income' ? 'text-sage' : 'text-clay'}`}>
+                            {draft.type === 'income' ? '+' : '-'}
                             <input
                                 type="text"
-                                value={draft.note}
-                                onChange={(e) => updateField('note', e.target.value)}
-                                className={`${FIELD_CLASS} w-full`}
-                                placeholder='โน้ต (รายละเอียด)'
-                                />
-
-                        </div>
-                        <div className="text-sm font-medium text-ink/50">
-                            <input
-                                type="date"
-                                value={draft.date}
-                                onChange={(e) => updateField('date', e.target.value)}
-                                className={`${FIELD_CLASS} mt-1`}/>
+                                inputMode="decimal"
+                                value={draft.amount}
+                                onChange={amountHandler}
+                                className={`${FIELD_CLASS} w-full min-w-0 text-right tabular-nums`}
+                            />
                         </div>
                     </div>
-                    <div className='flex items-center gap-3'>
-                        <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
-                            {type === 'income' ? '+' : '-'}
-                            <input
-                                type="text"
-                                value={draft.amount}
-                                onChange={amountHandler} 
-                                className={`${FIELD_CLASS} w-20`}/>
-                        </div>
+
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
                         <select
                             name="type"
-                            id="type"
+                            id={`type-${id}`}
                             value={draft.type}
                             onChange={(e) => updateField('type', e.target.value)}
-                            className={`${FIELD_CLASS} w-20`}>
+                            className={`${FIELD_CLASS} min-w-0 flex-1`}
+                        >
                             <option value="expense">รายจ่าย</option>
                             <option value="income">รายรับ</option>
                         </select>
-                        <button onClick={saveHandler} className="text-ink/30 transition hover:text-ink">Save</button>
-                        <button onClick={onCancelEdit} className="text-ink/30 transition hover:text-ink">Cancel</button>
+                        <button
+                            type="button"
+                            onClick={saveHandler}
+                            className="shrink-0 rounded px-2 py-1 text-sm text-ink/50 transition hover:text-ink"
+                        >
+                            Save
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onCancelEdit}
+                            className="shrink-0 rounded px-2 py-1 text-sm text-ink/50 transition hover:text-ink"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
-
             </div>
         );
     }
 
     return (
-        <div className="divide-y divide-line rounded-2xl border border-line bg-white/60 px-6 py-4">
-            <div className='flex justify-between items-center'>
-                <div className='flex flex-col'>
-                    <div className="flex items-center gap-2 text-sm font-medium text-ink">
-                        {CATEGORY_LABELS[category]}
-                        {note && <div className="text-sm font-medium text-ink">· {note}</div>}
+        <div className="min-w-0 rounded-2xl border border-line bg-white/60 px-4 py-3 sm:px-6 sm:py-4">
+            <div className="flex min-w-0 items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                    <div className="flex min-w-0 items-center gap-2 text-sm font-medium text-ink">
+                        <span className="shrink-0">{CATEGORY_LABELS[category]}</span>
+                        {note && (
+                            <span className="truncate text-ink/70">· {note}</span>
+                        )}
                     </div>
                     <div className="text-sm font-medium text-ink/50">{formatDate(date)}</div>
                 </div>
-                <div className='flex items-center gap-3'>
-                    <div className={`text-sm font-mono font-medium text-center ${type === 'income' ? 'text-sage' : 'text-clay'} `}>
+                <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                    <div className={`text-sm font-mono font-medium tabular-nums ${type === 'income' ? 'text-sage' : 'text-clay'}`}>
                         {type === 'income' ? '+' : '-'}{formatCurrencyCompact(amount)}
                     </div>
-                    <button onClick={editHandler} className="text-ink/30 transition hover:text-ink"><LucideEdit /></button>
-                    <button onClick={() => deleteExpense(id)} className="text-ink/30 transition hover:text-clay"><LucideTrash /></button>
+                    <button type="button" onClick={editHandler} className="text-ink/30 transition hover:text-ink">
+                        <LucideEdit />
+                    </button>
+                    <button type="button" onClick={() => deleteExpense(id)} className="text-ink/30 transition hover:text-clay">
+                        <LucideTrash />
+                    </button>
                 </div>
             </div>
-
         </div>
     );
 }
