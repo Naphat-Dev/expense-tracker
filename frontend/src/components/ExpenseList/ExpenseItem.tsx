@@ -7,6 +7,9 @@ import type { Expense, ExpenseDraft } from '../../types/expense';
 
 type ExpenseItemProps = {
     expenses: Expense
+    isEditing: boolean
+    onStartEdit: () => void
+    onCancelEdit: () => void
     deleteExpense: (id: string) => void
     updateExpense: (id: string, draft: ExpenseDraft) => void
 }
@@ -15,11 +18,9 @@ const FIELD_CLASS =
     'min-w-0 rounded border border-line bg-white px-2 py-1 text-sm outline-none focus:border-sage';
 
 
-function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps ) {
+function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExpense, updateExpense }: ExpenseItemProps) {
 
     const { id, type, amount, date, category, note } = expenses;
-
-    const [editMode, setEditMode] = useState(false);
 
     // รวมทุก field ที่แก้ไขได้ไว้ใน object เดียว
     const [draft, setDraft] = useState<ExpenseDraft>({ category, note, amount, date, type })
@@ -32,12 +33,12 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
 
     const editHandler = () => {
         setDraft({ category, note, amount, date, type })
-        setEditMode(true);
+        onStartEdit();
     };
 
     const saveHandler = () => {
-        updateExpense(id, draft)  // ส่งทั้งก้อนไปทีเดียว
-        setEditMode(false)
+        updateExpense(id, draft)
+        onCancelEdit()
     }
 
     const amountHandler = (
@@ -53,7 +54,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
         updateField('amount', value)
     }
 
-    if (editMode) {
+    if (isEditing) {
         return (
             <div className="divide-y divide-line rounded-2xl border border-line bg-white/60 px-6 py-4">
                 <div className='flex justify-between items-center'>
@@ -108,7 +109,7 @@ function ExpenseItem({ expenses, deleteExpense, updateExpense }:ExpenseItemProps
                             <option value="income">รายรับ</option>
                         </select>
                         <button onClick={saveHandler} className="text-ink/30 transition hover:text-ink">Save</button>
-                        <button onClick={() => setEditMode(false)} className="text-ink/30 transition hover:text-ink">Cancel</button>
+                        <button onClick={onCancelEdit} className="text-ink/30 transition hover:text-ink">Cancel</button>
                     </div>
                 </div>
 

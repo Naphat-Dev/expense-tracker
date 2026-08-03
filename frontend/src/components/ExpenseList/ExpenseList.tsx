@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ExpenseItem from './ExpenseItem';
 import type { Expense, ExpenseDraft } from '../../types/expense';
 
@@ -8,6 +9,7 @@ type ExpenseListProps = {
   }
 
 function ExpenseList({ expenses, deleteExpense, updateExpense }: ExpenseListProps) {
+    const [editingId, setEditingId] = useState<string | null>(null);
 
     const expensesList = expenses;
 
@@ -21,7 +23,15 @@ function ExpenseList({ expenses, deleteExpense, updateExpense }: ExpenseListProp
 
     return (
         <div className='mt-5'>{expensesList.map((item) =>
-            <ExpenseItem deleteExpense={deleteExpense} updateExpense={updateExpense} key={item.id} expenses={item} />)}</div>
+            <ExpenseItem
+                key={item.id}
+                expenses={item}
+                isEditing={editingId === item.id}
+                onStartEdit={() => setEditingId(item.id)}
+                onCancelEdit={() => setEditingId(null)}
+                deleteExpense={deleteExpense}
+                updateExpense={updateExpense}
+            />)}</div>
     );
 }
 
