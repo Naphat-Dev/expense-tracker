@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/auth/AuthLayout.tsx'
 import PasswordInput from '../components/auth/PasswordInput.tsx'
 import { loginApi } from '../api/auth.ts'
-import Swal from 'sweetalert2'
 
 export default function LoginPage() {
   const navigate = useNavigate()
