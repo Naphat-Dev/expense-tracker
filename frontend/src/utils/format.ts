@@ -10,6 +10,7 @@ export function formatDate(iso: string): string {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    calendar: 'gregory',
   }).format(new Date(iso))
 }
   
