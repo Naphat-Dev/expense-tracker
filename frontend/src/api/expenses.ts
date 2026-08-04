@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import { CATEGORIES, type Expense, type ExpenseDraft, type ExpenseSummary } from '../types/expense'
 import type { ExpenseFiltersState } from '../types/filter'
+import { apiFetch, jsonBody } from './http'
 
-const API_BASE = import.meta.env.VITE_API_URL ?? ''
-const DEFAULT_TIMEOUT_MS = 10_000
+
 
 // ---------- Runtime validation (zod) ----------
 // npm install zod
@@ -44,80 +44,12 @@ function toExpense(raw: unknown): Expense {
   }
 }
 
-// ---------- Error handling ----------
-
-export class ApiError extends Error {
-  status: number
-
-  constructor(message: string, status: number) {
-    super(message)
-    this.name = 'ApiError'
-    this.status = status
-  }
-}
-
-async function parseResponse<T>(res: Response): Promise<T> {
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    const message =
-      typeof body?.message === 'string' ? body.message : res.statusText
-    throw new ApiError(message || `Request failed (${res.status})`, res.status)
-  }
-
-  // 204 No Content หรือ body ว่าง -> ไม่ต้อง parse
-  if (res.status === 204) {
-    return undefined as T
-  }
-
-  const text = await res.text()
-  if (!text) {
-    return undefined as T
-  }
-
-  return JSON.parse(text) as T
-}
-
-// ---------- Core fetch wrapper ----------
-
-async function apiFetch<T>(
-  path: string,
-  options: RequestInit = {},
-  timeoutMs = DEFAULT_TIMEOUT_MS,
-): Promise<T> {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
-
-  try {
-    const res = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      cache: 'no-store',
-      signal: controller.signal,
-    })
-    return await parseResponse<T>(res)
-  } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
-      throw new ApiError('Request timed out', 0)
-    }
-    if (err instanceof ApiError) {
-      throw err
-    }
-    throw new ApiError(
-      err instanceof Error ? err.message : 'Unknown error',
-      0,
-    )
-  } finally {
-    clearTimeout(timeoutId)
-  }
-}
-
-function jsonBody(payload: unknown): RequestInit {
-  return {
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }
-}
 
 // ---------- Public API ----------
+
+
+
+
 
 /** ดึงรายการทั้งหมด */
 export async function fetchExpenses(): Promise<Expense[]> {
