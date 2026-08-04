@@ -7,8 +7,14 @@ import { deleteAllExpenses } from '../controllers/expenseController';
 import { deleteExpense } from '../controllers/expenseController';
 import { getSummary } from '../controllers/expenseController';
 import { getExpensesByFilter } from '../controllers/expenseController';
+import { requireAuth } from '../middleware/auth';
 
 const router = express.Router();
+
+// ทุก route ในไฟล์นี้ต้อง login ก่อนถึงจะเข้าได้
+router.use(requireAuth);
+
+
 router.get('/', getAllExpenses);
 router.get('/summary', getSummary);
 router.get('/filter', getExpensesByFilter);

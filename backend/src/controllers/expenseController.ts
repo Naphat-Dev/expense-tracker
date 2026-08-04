@@ -4,7 +4,7 @@ import { getTimeRangeBounds } from '../utils/date';
 
 export const getAllExpenses = async (req: Request, res: Response) => {
     try {
-        const expenses = await Expense.find();
+        const expenses = await Expense.find({ user: req.userId });
         res.json(expenses);
     } catch (err) {
         console.error(err);
@@ -15,7 +15,10 @@ export const getAllExpenses = async (req: Request, res: Response) => {
 export const getExpenseById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const expense = await Expense.findById(id);
+        const expense = await Expense.findOne({
+            _id: id,
+            user: req.userId,
+        });
         res.json(expense);
     } catch (err) {
         console.error(err);
@@ -28,7 +31,10 @@ export const createExpense = async (req: Request, res: Response) => {
     try {
         console.log(req.body);
 
-        const expense = await Expense.create(req.body);
+        const expense = await Expense.create({
+            ...req.body,
+            user: req.userId,
+        })
 
         res.status(201).json(expense);
     } catch (err) {
@@ -44,8 +50,11 @@ export const updateExpense = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        const updatedExpense = await Expense.findByIdAndUpdate(
-            id,
+        const updatedExpense = await Expense.findOneAndUpdate(
+            {
+                _id: id,
+                user: req.userId,
+            },
             req.body,
             {
                 new: true,
@@ -74,7 +83,10 @@ export const deleteExpense = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        const deletedExpense = await Expense.findByIdAndDelete(id);
+        const deletedExpense = await Expense.findOneAndDelete({
+            _id: id,
+            user: req.userId,
+        });
 
         if (!deletedExpense) {
             return res.status(404).json({
@@ -97,7 +109,9 @@ export const deleteExpense = async (req: Request, res: Response) => {
 
 export const deleteAllExpenses = async (req: Request, res: Response) => {
     try {
-        await Expense.deleteMany();
+        await Expense.deleteMany({
+            user: req.userId,
+        });
         res.status(200).json({ message: "All expenses deleted successfully" });
     } catch (error) {
         console.error(error);
@@ -107,7 +121,9 @@ export const deleteAllExpenses = async (req: Request, res: Response) => {
 
 export const getSummary = async (req: Request, res: Response) => {
     try {
-        const expenses = await Expense.find();
+        const expenses = await Expense.find({
+            user: req.userId,
+        });
 
         const income = expenses
             .filter(expense => expense.type === "income")
@@ -143,7 +159,9 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
             sort,
         } = req.query;
 
-        const filter: any = {};
+        const filter: any = {
+            user: req.userId,
+        };
 
         if (type && type !== "all") {
             filter.type = type;
