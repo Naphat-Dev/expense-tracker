@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
+import isEmail from "validator/lib/isEmail";
+
 
 interface RegisterBody {
     name: string;
@@ -27,6 +29,7 @@ function toPublicUser(user: IUser) {
     };
 }
 
+
 export const register = async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     try {
         const { name, email, password } = req.body;
@@ -35,6 +38,10 @@ export const register = async (req: Request<{}, {}, RegisterBody>, res: Response
             return res.status(400).json({
                 message: "กรุณากรอกข้อมูลให้ครบ",
             });
+        }
+
+        if (!isEmail(email)) {
+            return res.status(400).json({ message: "รูปแบบอีเมลไม่ถูกต้อง กรุณาใช้รูปแบบ example@example.com" });
         }
 
         if (password.length < 8) {
