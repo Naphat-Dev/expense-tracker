@@ -26,10 +26,10 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout title="เข้าสู่ระบบ" subtitle="ยินดีต้อนรับกลับมา">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <AuthLayout title="เข้าสู่ระบบ" subtitle="ยินดีต้อนรับ">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         <div>
-          <label htmlFor="email" className="mb-1 block text-xs font-medium text-ink/70">
+          <label htmlFor="email" className="mb-1 block text-xs font-medium text-ink/70 md:mb-2 md:text-sm">
             อีเมล
           </label>
           <input
@@ -40,31 +40,33 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-lg border border-line bg-paper/40 px-3 py-2.5 text-sm text-ink outline-none transition focus:border-sage focus:ring-2 focus:ring-sage/20"
+            className="w-full rounded-lg border border-line bg-paper/40 px-3 py-2.5 text-sm text-ink outline-none transition focus:border-sage focus:ring-2 focus:ring-sage/20 md:rounded-xl md:px-4 md:py-3 md:text-base"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1 block text-xs font-medium text-ink/70">
+          <label htmlFor="password" className="mb-1 block text-xs font-medium text-ink/70 md:mb-2 md:text-sm">
             รหัสผ่าน
           </label>
           <PasswordInput id="password" value={password} onChange={setPassword} autoComplete="current-password" />
         </div>
 
         {error ? (
-          <p className="rounded-lg border border-clay/30 bg-clay/5 px-3 py-2 text-xs text-clay">{error}</p>
+          <p className="rounded-lg border border-clay/30 bg-clay/5 px-3 py-2 text-xs text-clay md:rounded-xl md:px-4 md:py-3 md:text-sm">
+            {error}
+          </p>
         ) : null}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-sage py-2.5 text-sm font-medium text-white transition hover:bg-sage/90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-sage py-2.5 text-sm font-medium text-white transition hover:bg-sage/90 disabled:cursor-not-allowed disabled:opacity-60 md:rounded-xl md:py-3 md:text-base"
         >
           {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-xs text-ink/60">
+      <p className="mt-6 text-center text-xs text-ink/60 md:mt-8 md:text-sm">
         ยังไม่มีบัญชี?{' '}
         <Link to="/register" className="font-medium text-sage hover:underline">
           สมัครสมาชิก
