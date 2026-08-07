@@ -15,7 +15,7 @@ import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile.ts'
-import ProfileDropdown from '../components/ProfileDropdown.tsx'
+import ProfileDropdown from '../components/ProfileDropdown'
 
 
 const DEFAULT_FILTERS: ExpenseFiltersState = {
