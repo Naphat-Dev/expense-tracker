@@ -15,7 +15,7 @@ import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
-import Profiledropdown from '../components/ProfileDropdown'
+import ProfileDropdown from '../components/ProfileDropdown'
 
 
 
@@ -167,7 +167,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Profiledropdown name={userName} email={userEmail} onLogout={handleLogout} />
+                    <ProfileDropdown name={userName} email={userEmail} onLogout={handleLogout} />
                 </div>
             </header>
 
