@@ -94,4 +94,4 @@ function ProfileDropdown({ name, email, onLogout }: ProfileDropdownProps) {
     )
 }
 
-export default ProfileDropdown
+export default Profiledropdown
