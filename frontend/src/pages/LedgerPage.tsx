@@ -14,6 +14,8 @@ import {
 import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import { fetchProfile } from '../api/profile.ts'
+import ProfileDropdown from '../components/ProfileDropdown.tsx'
 
 
 const DEFAULT_FILTERS: ExpenseFiltersState = {
@@ -28,7 +30,26 @@ function App() {
     const [expenses, setExpense] = useState<Expense[]>([])
     const [filters, setFilters] = useState(DEFAULT_FILTERS)
     const [loadError, setLoadError] = useState<string | null>(null)
+    const [userName, setUserName] = useState('')
+    const [userEmail, setUserEmail] = useState('')
     const navigate = useNavigate()
+
+
+    useEffect(() => {
+        let cancelled = false
+            ; (async () => {
+                try {
+                    const profile = await fetchProfile()
+                    if (!cancelled) setUserName(profile.name)
+                    if (!cancelled) setUserEmail(profile.email)
+                } catch {
+                    // เงียบไว้ ไม่ให้กระทบหน้า ledger หลัก ถ้าโหลด profile ไม่สำเร็จ
+                }
+            })()
+        return () => {
+            cancelled = true
+        }
+    }, [])
 
     const summary = useMemo<ExpenseSummary>(() => {
         const income = expenses
@@ -144,12 +165,9 @@ function App() {
                     </h1>
                 </div>
 
-                <button
-                    onClick={handleLogout}
-                    className="rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white transition hover:bg-clay/90"
-                >
-                    Logout
-                </button>
+                <div className="flex items-center gap-3">
+                    <ProfileDropdown name={userName} email={userEmail} onLogout={handleLogout} />
+                </div>
             </header>
 
             {loadError ? (

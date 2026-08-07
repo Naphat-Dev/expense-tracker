@@ -39,7 +39,7 @@ async function parseResponse<T>(res: Response): Promise<T> {
     const message =
       typeof body?.message === 'string' ? body.message : res.statusText
 
-    // token หมดอายุ/ไม่ถูกต้อง -> เคลียร์ทิ้งกันสภาพค้าง
+    // token หมดอายุ/ไม่ถูกต้อง -> เคลียร์ทิ้งกันค้าง
     if (res.status === 401) {
       clearToken()
     }

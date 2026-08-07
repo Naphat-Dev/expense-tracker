@@ -4,6 +4,7 @@ import PublicRoute from './components/auth/PublicRoute'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import LedgerPage from './pages/LedgerPage'  
+import ProfilePage from './pages/ProfilePage'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<LedgerPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
 
       {/* path ที่ไม่ตรงกับอะไรเลย -> เด้งกลับหน้าแรก */}
