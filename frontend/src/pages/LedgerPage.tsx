@@ -15,7 +15,8 @@ import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
-import ProfileDropdown from '../components/ProfileDropdown'
+import Profiledropdown from '../components/ProfileDropdown'
+
 
 
 const DEFAULT_FILTERS: ExpenseFiltersState = {
@@ -166,7 +167,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <ProfileDropdown name={userName} email={userEmail} onLogout={handleLogout} />
+                    <Profiledropdown name={userName} email={userEmail} onLogout={handleLogout} />
                 </div>
             </header>
 

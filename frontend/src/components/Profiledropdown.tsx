@@ -8,7 +8,7 @@ interface ProfileDropdownProps {
     onLogout: () => void
 }
 
-function ProfileDropdown({ name, email, onLogout }: ProfileDropdownProps) {
+function Profiledropdown({ name, email, onLogout }: ProfileDropdownProps) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
@@ -94,4 +94,4 @@ function ProfileDropdown({ name, email, onLogout }: ProfileDropdownProps) {
     )
 }
 
-export default ProfileDropdown
+export default Profiledropdown
