@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Expense, ExpenseDraft, ExpenseSummary } from '../types/expense'
 import ExpenseForm from '../components/ExpenseForm'
-import SummaryCards from '../components/SummaryCards.tsx'
-import ExpenseList from '../components/ExpenseList/ExpenseList.tsx'
-import ExpenseFilters from '../components/ExpenseFilters.tsx'
+import SummaryCards from '../components/SummaryCards'
+import ExpenseList from '../components/ExpenseList/ExpenseList'
+import ExpenseFilters from '../components/ExpenseFilters'
 import type { ExpenseFiltersState } from '../types/filter'
 import {
     createExpense,
@@ -14,7 +14,7 @@ import {
 import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
-import { fetchProfile } from '../api/profile.ts'
+import { fetchProfile } from '../api/profile'
 import ProfileDropdown from '../components/ProfileDropdown'
 
 

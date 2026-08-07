@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AuthLayout from '../components/auth/AuthLayout.tsx'
-import PasswordInput from '../components/auth/PasswordInput.tsx'
-import { loginApi } from '../api/auth.ts'
+import AuthLayout from '../components/auth/AuthLayout'
+import PasswordInput from '../components/auth/PasswordInput'
+import { loginApi } from '../api/auth'
 
 export default function LoginPage() {
   const navigate = useNavigate()
