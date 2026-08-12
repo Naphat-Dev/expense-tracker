@@ -1,6 +1,6 @@
 // src/api/http.ts
 const API_BASE = import.meta.env.VITE_API_URL ?? ''
-const DEFAULT_TIMEOUT_MS = 30_000
+const DEFAULT_TIMEOUT_MS = 15_000
 const TOKEN_KEY = 'token'
 
 export class ApiError extends Error {
