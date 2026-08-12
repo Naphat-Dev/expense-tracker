@@ -75,5 +75,5 @@ http
 Authorization: Bearer <token>
 Live Demo
 <p align="center"> <a href="https://my-expensetrack.vercel.app"> <img src="https://img.shields.io/badge/🚀%20Open%20Expense%20Tracker-000000?style=for-the-badge" alt="Open Expense Tracker"> </a> </p>
-<p align="center"> Built with React, TypeScript, Node.js, Express, and MongoDB. </p> ```
+<p align="center"> Built with React, TypeScript, Node.js, Express, and MongoDB. </p> 
 
