@@ -1,23 +1,75 @@
-Expense Tracker
+# Expense Tracker
 
 A full-stack web application for managing personal income and expenses.
 
-Built with React, TypeScript, Node.js, Express, and MongoDB, with JWT-based authentication and user-specific data access.
+Built with React, TypeScript, Node.js, Express, and MongoDB. The application provides JWT-based authentication, transaction management, search and filtering, financial summaries, and user-specific data access.
 
-Live Demo
+<p align="center">
+  <a href="https://my-expensetrack.vercel.app">
+    <img src="https://img.shields.io/badge/Live%20Demo-Visit%20Application-000000?style=for-the-badge" alt="Live Demo">
+  </a>
+</p>
 
-Overview
+---
 
-Expense Tracker helps users manage their daily financial transactions through a simple and responsive interface.
+## Overview
 
-Each user has their own account and can create, edit, delete, search, filter, and sort their transactions. The application also provides a financial summary of income, expenses, and balance.
+Expense Tracker allows users to manage their personal finances through a simple and responsive interface.
 
-Features
-Authentication — User registration and login with JWT
-Transaction Management — Create, edit, and delete income and expense transactions
-Financial Summary — View total income, expenses, and current balance
-Search & Filtering — Search by note or category and filter by type, category, and time range
-Sorting — Sort transactions by date or amount
-Profile Management — Update username and change password
-Protected Data — Users can only access their own transactions
-Responsive UI — Designed for desktop and mobile devices
+Each user has an individual account and can manage only their own transactions.
+
+### Key Features
+
+| Feature | Description |
+|---|---|
+| Authentication | Register and login with JWT-based authentication |
+| Transactions | Create, edit, and delete income and expense records |
+| Financial Summary | View total income, expenses, and current balance |
+| Search | Search transactions by note or category |
+| Filtering | Filter by type, category, and time range |
+| Sorting | Sort transactions by date or amount |
+| Profile | Update username and change password |
+| Data Isolation | Users can only access their own transactions |
+| Responsive UI | Supports desktop and mobile devices |
+
+---
+
+## Tech Stack
+
+| Category | Technologies |
+|---|---|
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, React Router |
+| Backend | Node.js, Express, TypeScript |
+| Database | MongoDB, Mongoose |
+| Authentication | JWT, bcrypt |
+| Deployment | Vercel, Render, MongoDB Atlas |
+
+---
+
+## Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │       Frontend       │
+                    │                      │
+                    │ React + TypeScript   │
+                    │ Vite + Tailwind CSS  │
+                    └──────────┬───────────┘
+                               │
+                               │ REST API
+                               │ JWT
+                               ▼
+                    ┌──────────────────────┐
+                    │       Backend        │
+                    │                      │
+                    │ Node.js + Express    │
+                    │     TypeScript       │
+                    └──────────┬───────────┘
+                               │
+                               │ Mongoose
+                               ▼
+                    ┌──────────────────────┐
+                    │       MongoDB        │
+                    │                      │
+                    │  Users / Expenses    │
+                    └──────────────────────┘
