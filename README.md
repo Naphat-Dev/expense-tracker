@@ -111,3 +111,111 @@ The application supports user authentication, transaction management, search and
 │        MongoDB          │
 │   User / Expense Data   │
 └─────────────────────────┘
+📁 Project Structure
+expense-tracker/
+│
+├── 📂 backend/
+│   └── 📂 src/
+│       ├── 📂 config/
+│       ├── 📂 controllers/
+│       ├── 📂 middleware/
+│       ├── 📂 models/
+│       ├── 📂 routes/
+│       └── 📄 server.ts
+│
+└── 📂 frontend/
+    └── 📂 src/
+        ├── 📂 api/
+        ├── 📂 components/
+        ├── 📂 pages/
+        ├── 📂 types/
+        └── 📄 App.tsx
+🚀 Getting Started
+📋 Prerequisites
+Node.js 18+
+npm
+MongoDB or MongoDB Atlas
+1️⃣ Clone the Repository
+git clone https://github.com/<username>/expense-tracker.git
+cd expense-tracker
+2️⃣ Backend Setup
+cd backend
+npm install
+
+Create a .env file:
+
+PORT=3000
+MONGO_URI=your-mongodb-connection-string
+JWT_SECRET=your-secret-key
+
+Start the development server:
+
+npm run dev
+
+Backend:
+
+http://localhost:3000
+3️⃣ Frontend Setup
+
+Open another terminal:
+
+cd frontend
+npm install
+
+Create .env.development if needed:
+
+VITE_API_URL=http://localhost:3000
+
+Start the development server:
+
+npm run dev
+
+Frontend:
+
+http://localhost:5173
+🔌 API Overview
+
+The backend provides RESTful APIs for:
+
+🔐 Authentication
+💰 Expense CRUD operations
+🔎 Search and filtering
+📊 Financial summaries
+👤 User profile management
+🔑 Password management
+
+Protected endpoints require a JWT:
+
+Authorization: Bearer <token>
+
+Example:
+
+GET /api/expenses/filter?type=expense&category=food&timeRange=thismonth&sort=amount-desc
+🌍 Deployment
+Service	Platform
+🎨 Frontend	Vercel
+⚙️ Backend	Render
+🗄️ Database	MongoDB Atlas
+📚 What I Learned
+
+Through this project, I practiced:
+
+⚛️ Building a full-stack application with React and Node.js
+🔌 Designing RESTful APIs with Express
+🗄️ Working with MongoDB and Mongoose
+🔐 Implementing JWT authentication
+🔑 Password hashing with bcrypt
+🛡️ Building protected routes and user-specific data access
+✏️ Implementing CRUD operations
+🔎 Implementing search, filtering, and sorting
+🔗 Connecting frontend and backend services
+🚀 Deploying a full-stack application
+🔒 Security
+Passwords are hashed using bcrypt
+Authentication is handled using JWT
+Protected API routes require a valid token
+Expense data is associated with the authenticated user's userId
+Users can only access and modify their own transactions
+Sensitive configuration is stored in environment variables
+
+⚠️ Never commit .env files or expose secret keys in the repository.
