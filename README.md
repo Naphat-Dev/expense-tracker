@@ -73,7 +73,10 @@ Each user has an individual account and can manage only their own transactions.
                     │                      │
                     │  Users / Expenses    │
                     └──────────────────────┘
-Project Structure
+
+---
+
+## Project Structure
 expense-tracker/
 │
 ├── backend/
