@@ -73,3 +73,48 @@ Each user has an individual account and can manage only their own transactions.
                     │                      │
                     │  Users / Expenses    │
                     └──────────────────────┘
+Project Structure
+expense-tracker/
+│
+├── backend/
+│   └── src/
+│       ├── config/
+│       │   └── database configuration
+│       │
+│       ├── controllers/
+│       │   ├── auth
+│       │   ├── expense
+│       │   └── profile
+│       │
+│       ├── middleware/
+│       │   └── authentication
+│       │
+│       ├── models/
+│       │   ├── User
+│       │   └── Expense
+│       │
+│       ├── routes/
+│       │   ├── auth
+│       │   ├── expense
+│       │   └── profile
+│       │
+│       └── server.ts
+│
+└── frontend/
+    └── src/
+        ├── api/
+        │   └── API client and requests
+        │
+        ├── components/
+        │   └── Reusable UI components
+        │
+        ├── pages/
+        │   ├── Login
+        │   ├── Register
+        │   ├── Ledger
+        │   └── Profile
+        │
+        ├── types/
+        │   └── TypeScript types
+        │
+        └── App.tsx
