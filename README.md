@@ -6,10 +6,7 @@ Built with React, TypeScript, Node.js, Express, and MongoDB. The application pro
 
 <p align="center">
   <a href="https://my-expensetrack.vercel.app">
-    <img src="https://img.shields.io/badge/Expense%20Tracker-Live%20Demo-000000?style=for-the-badge" alt="Expense Tracker">
-  </a>
-  <a href="https://portfolio-web-mu-woad.vercel.app">
-    <img src="https://img.shields.io/badge/Portfolio-Live%20Demo-000000?style=for-the-badge" alt="Portfolio">
+    <img src="https://img.shields.io/badge/Live%20Demo-Visit%20Application-000000?style=for-the-badge" alt="Live Demo">
   </a>
 </p>
 
