@@ -62,29 +62,29 @@ function ProfileDropdown({ name, email, onLogout }: ProfileDropdownProps) {
             </button>
 
             {isOpen ? (
-                <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+                <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-surface shadow-elevated">
                     <div className="flex items-center gap-3 px-4 py-3">
                         <InitialAvatar name={name || '?'} size="sm" />
                         <div className="min-w-0">
-                            <p className="truncate font-display text-sm font-semibold text-ink">
+                            <p className="truncate text-sm font-semibold text-ink">
                                 {name || 'ผู้ใช้งาน'}
                             </p>
-                            <p className="truncate text-xs text-ink/60">{email}</p>
+                            <p className="truncate text-xs text-muted">{email}</p>
                         </div>
                     </div>
 
-                    <div className="border-t border-gray-100" />
+                    <div className="border-t border-line" />
 
                     <button
                         onClick={goToProfile}
-                        className="w-full px-4 py-2.5 text-left text-sm text-ink transition hover:bg-gray-50"
+                        className="w-full px-4 py-2.5 text-left text-sm text-ink transition hover:bg-paper"
                     >
                         โปรไฟล์ของฉัน
                     </button>
 
                     <button
                         onClick={handleLogoutClick}
-                        className="w-full px-4 py-2.5 text-left text-sm text-clay transition hover:bg-gray-50"
+                        className="w-full px-4 py-2.5 text-left text-sm text-muted transition hover:bg-paper hover:text-clay"
                     >
                         ออกจากระบบ
                     </button>

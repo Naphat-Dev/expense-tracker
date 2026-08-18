@@ -12,11 +12,11 @@ const INITIAL_FORM = {
 }
 // ข้อมูลของปุ่มเลือกประเภท
 const EXPENSE_TYPE_OPTIONS = [
-  { value: 'income', label: 'รายรับ', activeColorClass: 'bg-sage text-white' },
-  { value: 'expense', label: 'รายจ่าย', activeColorClass: 'bg-clay text-white' },
+  { value: 'income', label: 'รายรับ', activeColorClass: 'border-ink bg-sage text-white' },
+  { value: 'expense', label: 'รายจ่าย', activeColorClass: 'border-ink bg-clay text-white' },
 ]
 
-const INACTIVE_COLOR_CLASS = 'bg-line/60 text-ink/70 hover:bg-line'
+const INACTIVE_COLOR_CLASS = 'border border-line bg-surface text-muted hover:bg-paper'
 
 function ExpenseForm(props) {
   const [form, setForm] = useState(INITIAL_FORM)
@@ -69,7 +69,7 @@ function ExpenseForm(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border border-line bg-white/60 p-5'>
+      <form onSubmit={handleSubmit} className='space-y-4 rounded-card border border-line bg-surface p-5 shadow-card'>
         <div className='flex gap-2'>
           {EXPENSE_TYPE_OPTIONS.map((option) => {
             const isActive = form.type === option.value
@@ -79,7 +79,7 @@ function ExpenseForm(props) {
                 key={option.value}
                 type="button"
                 onClick={() => updateField('type', option.value)}
-                className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${isActive ? option.activeColorClass : INACTIVE_COLOR_CLASS
+                className={`flex-1 rounded-md py-2 text-sm font-medium transition ${isActive ? option.activeColorClass : INACTIVE_COLOR_CLASS
                   }`}
               >
                 {option.label}
@@ -91,9 +91,9 @@ function ExpenseForm(props) {
 
         <div className='grid grid-cols-2 gap-4'>
           <div className='flex flex-col gap-2'>
-            <label className='text-sm text-ink/70' htmlFor="expense-amount">จำนวนเงิน</label>
+            <label className='text-sm font-medium text-muted' htmlFor="expense-amount">จำนวนเงิน</label>
             <input
-              className='w-full rounded-lg border border-line px-2 py-1 outline-none focus:border-sage'
+              className='w-full rounded-lg border border-line bg-paper px-2 py-1.5 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
               placeholder='0.00'
               inputMode='decimal'
               type="text"
@@ -105,9 +105,9 @@ function ExpenseForm(props) {
             />
           </div>
           <div className='flex flex-col gap-2'>
-            <label className='text-sm text-ink/70' htmlFor="expense-date">วันที่</label>
+            <label className='text-sm font-medium text-muted' htmlFor="expense-date">วันที่</label>
             <input
-              className='w-full rounded-lg border border-line px-2 py-1 outline-none focus:border-sage'
+              className='w-full rounded-lg border border-line bg-paper px-2 py-1.5 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
               type="date"
               id="expense-date"
               value={form.date}
@@ -118,9 +118,9 @@ function ExpenseForm(props) {
         </div>
 
         <div className='flex flex-col gap-2'>
-          <label className='text-sm text-ink/70' htmlFor="expense-category">หมวดหมู่</label>
+          <label className='text-sm font-medium text-muted' htmlFor="expense-category">หมวดหมู่</label>
           <select
-            className='w-full rounded-lg border border-line px-2 py-1 outline-none focus:border-sage'
+            className='w-full rounded-lg border border-line bg-paper px-2 py-1.5 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
             id="expense-category"
             value={form.category}
             onChange={(e) => updateField('category', e.target.value)}
@@ -132,9 +132,9 @@ function ExpenseForm(props) {
         </div>
 
         <div className='flex flex-col gap-2'>
-          <label className='text-sm text-ink/70' htmlFor="expense-note">โน็ต(ถ้ามี)</label>
+          <label className='text-sm font-medium text-muted' htmlFor="expense-note">โน็ต(ถ้ามี)</label>
           <input
-            className='w-full rounded-lg border border-line px-2 py-1 outline-none focus:border-sage'
+            className='w-full rounded-lg border border-line bg-paper px-2 py-1.5 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
             id="expense-note"
             placeholder="เช่น ข้าวเที่ยงกับทีม"
             value={form.note}
@@ -142,8 +142,8 @@ function ExpenseForm(props) {
           />
         </div>
 
-        {err && <p className='text-red-500'>{err}</p>}
-        <button type="submit" className='w-full rounded-lg px-4 py-2 bg-black hover:bg-black/90 text-white mt-2'>
+        {err && <p className='text-sm text-clay'>{err}</p>}
+        <button type="submit" className='mt-2 w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white transition hover:bg-primary-dark'>
           บันทึกรายการ
         </button>
       </form>

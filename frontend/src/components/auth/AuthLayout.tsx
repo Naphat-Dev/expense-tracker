@@ -13,11 +13,11 @@ export default function AuthLayout({
     <div className="flex min-h-screen items-center justify-center bg-paper px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-sage">Ledger</p>
-          <h1 className="mt-1 font-display text-3xl font-semibold text-ink">{title}</h1>
-          <p className="mt-2 text-sm text-ink/60">{subtitle}</p>
+          <p className="text-xs font-medium uppercase tracking-widest text-muted">Ledger</p>
+          <h1 className="mt-1 text-3xl font-semibold text-ink">{title}</h1>
+          <p className="mt-2 text-sm text-muted">{subtitle}</p>
         </div>
-        <div className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8">
           {children}
         </div>
       </div>

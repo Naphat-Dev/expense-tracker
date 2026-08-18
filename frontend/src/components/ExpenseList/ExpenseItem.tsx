@@ -15,7 +15,7 @@ type ExpenseItemProps = {
 }
 
 const FIELD_CLASS =
-    'min-w-0 rounded border border-line bg-white px-2 py-1 text-sm outline-none focus:border-sage';
+    'min-w-0 rounded-lg border border-line bg-paper px-2 py-1.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20';
 
 
 function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExpense, updateExpense }: ExpenseItemProps) {
@@ -56,7 +56,7 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
 
     if (isEditing) {
         return (
-            <div className="min-w-0 rounded-2xl border border-line bg-white/60 px-4 py-3 sm:px-6 sm:py-4">
+            <div className="min-w-0 rounded-card border border-line bg-surface px-4 py-3 shadow-card sm:px-6 sm:py-4">
                 <div className="flex min-w-0 flex-col gap-3">
                     <select
                         name="category"
@@ -113,14 +113,14 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
                         <button
                             type="button"
                             onClick={saveHandler}
-                            className="shrink-0 rounded px-2 py-1 text-sm text-ink/50 transition hover:text-ink"
+                            className="shrink-0 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white transition hover:bg-primary-dark"
                         >
                             Save
                         </button>
                         <button
                             type="button"
                             onClick={onCancelEdit}
-                            className="shrink-0 rounded px-2 py-1 text-sm text-ink/50 transition hover:text-ink"
+                            className="shrink-0 rounded-lg px-3 py-1.5 text-sm text-muted transition hover:bg-paper hover:text-ink"
                         >
                             Cancel
                         </button>
@@ -131,26 +131,26 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
     }
 
     return (
-        <div className="min-w-0 rounded-2xl border border-line bg-white/60 px-4 py-3 sm:px-6 sm:py-4">
+        <div className="min-w-0 rounded-card border border-line bg-surface px-4 py-3 shadow-card sm:px-6 sm:py-4">
             <div className="flex min-w-0 items-center justify-between gap-3">
                 <div className="min-w-0 flex-1">
                     <div className="flex min-w-0 items-center gap-2 text-sm font-medium text-ink">
                         <span className="shrink-0">{CATEGORY_LABELS[category]}</span>
                         {note && (
-                            <span className="truncate text-ink/70">· {note}</span>
+                            <span className="truncate text-muted">· {note}</span>
                         )}
                     </div>
-                    <div className="text-sm font-medium text-ink/50">{formatDate(date)}</div>
+                    <div className="text-sm font-medium text-muted">{formatDate(date)}</div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                     <div className={`text-sm font-mono font-medium tabular-nums ${type === 'income' ? 'text-sage' : 'text-clay'}`}>
                         {type === 'income' ? '+' : '-'}{formatCurrencyCompact(amount)}
                     </div>
-                    <button type="button" onClick={editHandler} className="text-ink/30 transition hover:text-ink">
-                        <LucideEdit />
+                    <button type="button" onClick={editHandler} className="rounded-lg p-1 text-muted transition hover:bg-paper hover:text-ink">
+                        <LucideEdit size={16} />
                     </button>
-                    <button type="button" onClick={() => deleteExpense(id)} className="text-ink/30 transition hover:text-clay">
-                        <LucideTrash />
+                    <button type="button" onClick={() => deleteExpense(id)} className="rounded-md p-1 text-muted transition hover:bg-paper hover:text-clay">
+                        <LucideTrash size={16} />
                     </button>
                 </div>
             </div>

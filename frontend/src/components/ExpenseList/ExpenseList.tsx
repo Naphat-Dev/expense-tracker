@@ -15,7 +15,7 @@ function ExpenseList({ expenses, deleteExpense, updateExpense }: ExpenseListProp
 
     if (expensesList.length === 0) {
         return (
-            <div className="rounded-2xl border border-dashed border-line p-8 text-center text-sm text-ink/50">
+            <div className="rounded-card border border-dashed border-line bg-surface p-8 text-center text-sm text-muted shadow-card">
                 ยังไม่มีรายการ — เพิ่มรายการแรกของคุณ
             </div>
         )

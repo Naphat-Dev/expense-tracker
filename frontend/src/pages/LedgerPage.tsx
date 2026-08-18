@@ -157,11 +157,11 @@ function App() {
 
 
     return (
-        <div className='min-h-screen overflow-x-hidden bg-gray-100 px-4 py-10 sm:px-8'>
-            <header className='mx-auto mb-8 flex max-w-5xl items-center justify-between'>
+        <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
+            <header className='mx-auto mb-8 flex max-w-5xl items-center justify-between border-b border-line pb-6'>
                 <div>
-                    <p className="font-mono text-xs uppercase tracking-widest text-sage">Ledger</p>
-                    <h1 className='font-display text-3xl font-semibold text-ink'>
+                    <p className="text-xs font-medium uppercase tracking-widest text-muted">Ledger</p>
+                    <h1 className='text-3xl font-semibold text-ink'>
                         บันทึกรายรับ-รายจ่าย
                     </h1>
                 </div>
@@ -172,7 +172,7 @@ function App() {
             </header>
 
             {loadError ? (
-                <p className="mx-auto mb-4 max-w-5xl rounded-lg border border-clay/40 bg-white px-4 py-3 text-sm text-clay">
+                <p className="mx-auto mb-4 max-w-5xl rounded-md border border-line bg-surface px-4 py-3 text-sm text-clay">
                     {loadError} — ตรวจว่า backend รันอยู่ (port 3000) และ MongoDB เชื่อมต่อได้
                 </p>
             ) : null}

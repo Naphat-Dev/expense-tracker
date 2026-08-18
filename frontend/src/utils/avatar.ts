@@ -14,12 +14,12 @@ export function getInitials(name: string): string {
 
 // สีพื้นหลัง avatar ที่เข้าธีมของแอป (ปรับ hex ให้ตรง palette จริงได้)
 const AVATAR_PALETTE = [
-    '#8A9A7E', // sage
-    '#C97C5D', // clay
-    '#5B6B73', // slate
-    '#B08968', // tan
-    '#7A8B99', // dusty blue
-    '#A6785F', // terracotta
+    '#1E3A5F',
+    '#374151',
+    '#1F5C45',
+    '#4B5563',
+    '#5C4A42',
+    '#6B7280',
 ]
 
 // สี avatar ตามชื่อ
