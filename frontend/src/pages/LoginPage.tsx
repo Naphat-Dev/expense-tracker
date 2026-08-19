@@ -26,7 +26,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout title="เข้าสู่ระบบ" subtitle="ยินดีต้อนรับ">
+    <AuthLayout title="เข้าสู่ระบบ" subtitle="บริหารการเงินของคุณ">
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         <div>
           <label htmlFor="email" className="mb-1 block text-xs font-medium text-ink/70 md:mb-2 md:text-sm">
