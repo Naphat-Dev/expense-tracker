@@ -57,7 +57,7 @@ function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFilters
     const resetFilters = () => setFilters(DEFAULT_FILTERS)
 
     return (
-        <div className='mt-4 rounded-card border border-line bg-surface p-3 shadow-card'>
+        <div className='rounded-card border border-line bg-surface p-3 shadow-card'>
             <div className='relative'>
                 <FiSearch className='absolute left-2.5 top-1/2 -translate-y-1/2 text-muted' size={15} />
                 <input

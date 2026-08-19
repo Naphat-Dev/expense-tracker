@@ -16,6 +16,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
 import ProfileDropdown from '../components/ProfileDropdown'
+import ExpenseCharts from '../components/ExpenseCharts'
 
 
 
@@ -27,8 +28,17 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
     sort: 'date-desc',
 }
 
+const CHART_FILTERS: ExpenseFiltersState = {
+    search: '',
+    type: 'all',
+    category: 'all',
+    timeRange: 'all',
+    sort: 'date-asc',
+}
+
 function App() {
     const [expenses, setExpense] = useState<Expense[]>([])
+    const [chartExpenses, setChartExpenses] = useState<Expense[]>([])
     const [filters, setFilters] = useState(DEFAULT_FILTERS)
     const [loadError, setLoadError] = useState<string | null>(null)
     const [userName, setUserName] = useState('')
@@ -63,7 +73,6 @@ function App() {
     }, [expenses])
 
     useEffect(() => {
-        console.log(filters)
         let cancelled = false
             ; (async () => {
                 try {
@@ -83,11 +92,32 @@ function App() {
         }
     }, [filters])
 
+    useEffect(() => {
+        let cancelled = false
+            ; (async () => {
+                try {
+                    const data = await fetchExpensesByFilter(CHART_FILTERS)
+                    if (!cancelled) setChartExpenses(data)
+                } catch {
+                    if (!cancelled) setChartExpenses([])
+                }
+            })()
+        return () => {
+            cancelled = true
+        }
+    }, [])
+
+    const refreshChartExpenses = async () => {
+        const data = await fetchExpensesByFilter(CHART_FILTERS)
+        setChartExpenses(data)
+    }
+
     const addExpense = async (draft: ExpenseDraft) => {
         try {
             await createExpense(draft)
             const data = await fetchExpensesByFilter(filters)
             setExpense(data)
+            await refreshChartExpenses()
 
             Swal.fire({
                 icon: 'success',
@@ -122,6 +152,7 @@ function App() {
                     await deleteExpenseApi(id)
                     const data = await fetchExpensesByFilter(filters)
                     setExpense(data)
+                    await refreshChartExpenses()
 
                     Swal.fire({
                         icon: 'success',
@@ -148,6 +179,7 @@ function App() {
             await updateExpenseApi(id, draft)
             const data = await fetchExpensesByFilter(filters)
             setExpense(data)
+            await refreshChartExpenses()
 
             Swal.fire({
                 icon: 'success',
@@ -185,7 +217,7 @@ function App() {
 
     return (
         <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
-            <header className='mx-auto mb-8 flex max-w-5xl items-center justify-between border-b border-line pb-6'>
+            <header className='mx-auto mb-8 flex max-w-6xl items-center justify-between border-b border-line pb-6'>
                 <div>
                     <div className="flex items-center gap-2">
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink text-[10px] font-bold text-paper">
@@ -208,20 +240,25 @@ function App() {
             </header>
 
             {loadError ? (
-                <p className="mx-auto mb-4 max-w-5xl rounded-md border border-line bg-surface px-4 py-3 text-sm text-clay">
+                <p className="mx-auto mb-4 max-w-6xl rounded-md border border-line bg-surface px-4 py-3 text-sm text-clay">
                     {loadError} — ตรวจว่า backend รันอยู่ (port 3000) และ MongoDB เชื่อมต่อได้
                 </p>
             ) : null}
 
-            <main className='mx-auto grid w-full min-w-0 max-w-5xl gap-6 lg:grid-cols-[360px_1fr]'>
-                <div className="min-w-0">
-                    <ExpenseForm addExpense={addExpense} />
-                </div>
+            <main className='mx-auto w-full min-w-0 max-w-6xl space-y-6'>
+                <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
 
-                <div className="min-w-0">
-                    <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
-                    <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
-                    <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
+                <div className="grid gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
+                    <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start space-y-4">
+                        <ExpenseForm addExpense={addExpense} />
+                        <ExpenseCharts expenses={chartExpenses} />
+                    </aside>
+
+                    <section className="min-w-0 space-y-4">
+                        <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
+                        <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
+                    </section>
+
                 </div>
             </main>
 

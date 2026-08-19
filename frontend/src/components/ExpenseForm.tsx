@@ -67,9 +67,18 @@ function ExpenseForm(props) {
 
   }
 
+  const handleClear = () => {
+    setForm({ ...INITIAL_FORM })
+    setErr(null)
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit} className='space-y-4 rounded-card border border-line bg-surface p-5 shadow-card'>
+        <header className='mb-4 flex flex-wrap items-start justify-between gap-3'>
+          <h2 className='text-sm font-semibold text-ink'>เพิ่มรายการ</h2>
+          <button onClick={handleClear} type="button" className='text-sm font-medium text-muted hover:text-ink'>ล้างฟอร์ม</button>
+        </header>
         <div className='flex gap-2'>
           {EXPENSE_TYPE_OPTIONS.map((option) => {
             const isActive = form.type === option.value
