@@ -187,11 +187,17 @@ function App() {
         <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
             <header className='mx-auto mb-8 flex max-w-5xl items-center justify-between border-b border-line pb-6'>
                 <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-                        Expense Tracker
-                    </p>
+                    <div className="flex items-center gap-2">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink text-[10px] font-bold text-paper">
+                            ET
+                        </div>
 
-                    <h1 className="mt-1 text-3xl font-semibold text-ink">
+                        <span className="text-sm font-bold tracking-tight text-ink">
+                            Expense Tracker
+                        </span>
+                    </div>
+
+                    <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">
                         บันทึกรายรับ-รายจ่าย
                     </h1>
                 </div>
