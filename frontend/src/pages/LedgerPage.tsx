@@ -88,6 +88,15 @@ function App() {
             await createExpense(draft)
             const data = await fetchExpensesByFilter(filters)
             setExpense(data)
+
+            Swal.fire({
+                icon: 'success',
+                title: 'บันทึกสำเร็จ',
+                showConfirmButton: false,
+                timer: 1500,
+                position: 'top',
+                toast: true,
+            })
         } catch (err) {
             await Swal.fire({
                 icon: 'error',
@@ -113,6 +122,15 @@ function App() {
                     await deleteExpenseApi(id)
                     const data = await fetchExpensesByFilter(filters)
                     setExpense(data)
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ลบสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        position: 'top',
+                        toast: true,
+                    })
                 } catch (err) {
                     await Swal.fire({
                         icon: 'error',
@@ -130,6 +148,15 @@ function App() {
             await updateExpenseApi(id, draft)
             const data = await fetchExpensesByFilter(filters)
             setExpense(data)
+
+            Swal.fire({
+                icon: 'success',
+                title: 'แก้ไขสำเร็จ',
+                showConfirmButton: false,
+                timer: 1500,
+                position: 'top',
+                toast: true,
+            })
         } catch (err) {
             await Swal.fire({
                 icon: 'error',
@@ -160,8 +187,11 @@ function App() {
         <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
             <header className='mx-auto mb-8 flex max-w-5xl items-center justify-between border-b border-line pb-6'>
                 <div>
-                    <p className="text-xs font-medium uppercase tracking-widest text-muted">Ledger</p>
-                    <h1 className='text-3xl font-semibold text-ink'>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-muted">
+                        Expense Tracker
+                    </p>
+
+                    <h1 className="mt-1 text-3xl font-semibold text-ink">
                         บันทึกรายรับ-รายจ่าย
                     </h1>
                 </div>

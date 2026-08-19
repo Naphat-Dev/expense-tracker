@@ -58,7 +58,13 @@ function ProfileDropdown({ name, email, onLogout }: ProfileDropdownProps) {
                 aria-label="เปิดเมนูโปรไฟล์"
                 aria-expanded={isOpen}
             >
-                <InitialAvatar name={name || '?'} size="sm" />
+                <div className="flex items-center gap-2">
+                    <span className="hidden text-sm font-medium text-ink sm:block">
+                        {name || 'ผู้ใช้งาน'}
+                    </span>
+                    <InitialAvatar name={name || '?'} size="sm" />
+                </div>
+
             </button>
 
             {isOpen ? (
