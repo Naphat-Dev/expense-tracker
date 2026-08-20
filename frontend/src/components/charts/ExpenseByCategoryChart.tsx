@@ -87,7 +87,7 @@ export default function ExpenseByCategoryChart({
       emptyMessage="ยังไม่มีรายจ่ายในช่วงที่เลือก"
     >
       {/* Donut Chart */}
-      <div className="h-[260px] w-full">
+      <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
