@@ -45,7 +45,7 @@ export default function IncomeExpenseChart({
   expenses,
 }: IncomeExpenseChartProps) {
   const [period, setPeriod] =
-    useState<MonthlyChartPeriod>('lastmonth')
+    useState<MonthlyChartPeriod>('6months')
 
   const data = getIncomeExpenseByMonthData(
     expenses,

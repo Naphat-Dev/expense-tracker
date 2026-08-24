@@ -65,7 +65,7 @@ export default function ExpenseByCategoryChart({
   expenses,
 }: ExpenseByCategoryChartProps) {
   const [period, setPeriod] =
-    useState<ChartPeriod>('7days')
+    useState<ChartPeriod>('thismonth')
 
   const scopedExpenses = useMemo(
     () =>
