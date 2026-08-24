@@ -1,21 +1,11 @@
 import { FiSearch } from "react-icons/fi";
 import type { ExpenseFiltersState } from "../types/filter";
+import { CATEGORIES, CATEGORY_LABELS } from "../types/expense";
 
 const EXPENSE_TYPE_OPTIONS = [
     { value: 'all', label: 'ทั้งหมด', activeClass: 'bg-ink text-white' },
     { value: 'income', label: 'รายรับ', activeClass: 'bg-ink text-white' },
     { value: 'expense', label: 'รายจ่าย', activeClass: 'bg-ink text-white' },
-]
-
-const EXPENSE_CATEGORY_OPTIONS = [
-    { value: 'all', label: 'ทุกหมวดหมู่' },
-    { value: 'food', label: 'อาหาร' },
-    { value: 'travel', label: 'เดินทาง' },
-    { value: 'accommodation', label: 'ที่พัก' },
-    { value: 'entertainment', label: 'บันเทิง' },
-    { value: 'health', label: 'สุขภาพ' },
-    { value: 'salary', label: 'เงินเดือน' },
-    { value: 'other', label: 'อื่นๆ' },
 ]
 
 const TIME_RANGE_OPTIONS = [
@@ -38,10 +28,10 @@ const SELECT_CLASS = 'rounded-lg border border-line bg-surface px-2 py-1 text-xs
 type ExpenseFiltersProps = {
     filters: ExpenseFiltersState
     setFilters: React.Dispatch<
-      React.SetStateAction<ExpenseFiltersState>
+        React.SetStateAction<ExpenseFiltersState>
     >
     DEFAULT_FILTERS: ExpenseFiltersState
-  }
+}
 
 function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFiltersProps) {
 
@@ -96,8 +86,11 @@ function ExpenseFilters({ filters, setFilters, DEFAULT_FILTERS }: ExpenseFilters
                     onChange={(e) => updateFilter('category', e.target.value)}
                     className={SELECT_CLASS}
                 >
-                    {EXPENSE_CATEGORY_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                    <option value="all">ทุกหมวดหมู่</option>
+                    {CATEGORIES.map((category) => (
+                        <option key={category} value={category}>
+                            {CATEGORY_LABELS[category]}
+                        </option>
                     ))}
                 </select>
 

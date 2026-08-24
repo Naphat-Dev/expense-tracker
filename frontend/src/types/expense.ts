@@ -2,7 +2,7 @@ export type ExpenseType = 'income' | 'expense'
 
 export const CATEGORIES =
     [
-        'food', 'travel', 'accommodation', 'entertainment', 'health', 'salary', 'other'
+        'food', 'travel', 'accommodation', 'entertainment', 'health', 'shopping', 'salary', 'other'
     ] as const
 
 export type Category = (typeof CATEGORIES)[number]
@@ -30,6 +30,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
     accommodation: 'ที่พัก',
     entertainment: 'บันเทิง',
     health: 'สุขภาพ',
+    shopping: 'ช้อปปิ้ง',
     salary: 'เงินเดือน',
     other: 'อื่นๆ',
 }

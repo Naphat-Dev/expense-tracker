@@ -16,7 +16,9 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
 import ProfileDropdown from '../components/ProfileDropdown'
-import ExpenseCharts from '../components/ExpenseCharts'
+import ExpenseByCategoryChart from '../components/charts/ExpenseByCategoryChart'
+import IncomeExpenseChart from '../components/charts/IncomeExpenseChart'
+
 
 
 
@@ -54,7 +56,7 @@ function App() {
                     if (!cancelled) setUserName(profile.name)
                     if (!cancelled) setUserEmail(profile.email)
                 } catch {
-                    // เงียบไว้ ไม่ให้กระทบหน้า ledger หลัก ถ้าโหลด profile ไม่สำเร็จ
+                    
                 }
             })()
         return () => {
@@ -246,12 +248,13 @@ function App() {
             ) : null}
 
             <main className='mx-auto w-full min-w-0 max-w-6xl space-y-6'>
+                <IncomeExpenseChart expenses={chartExpenses} />
                 <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
 
                 <div className="grid gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
                     <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start space-y-4">
                         <ExpenseForm addExpense={addExpense} />
-                        <ExpenseCharts expenses={chartExpenses} />
+                        <ExpenseByCategoryChart expenses={chartExpenses} />
                     </aside>
 
                     <section className="min-w-0 space-y-4">
