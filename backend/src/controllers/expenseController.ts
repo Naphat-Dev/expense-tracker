@@ -231,3 +231,46 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
         });
     }
 };
+
+// Create expenses bulk
+export const createExpensesBulk = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const expenses = req.body;
+
+        if (!Array.isArray(expenses)) {
+            return res.status(400).json({
+                message: "Request body must be an array",
+            });
+        }
+
+        if (expenses.length === 0) {
+            return res.status(400).json({
+                message: "Expense list cannot be empty",
+            });
+        }
+
+        const expensesWithUser = expenses.map((expense) => ({
+            ...expense,
+            user: req.userId,
+        }));
+
+        const createdExpenses = await Expense.insertMany(
+            expensesWithUser
+        );
+
+        res.status(201).json({
+            message: `Created ${createdExpenses.length} expenses successfully`,
+            expenses: createdExpenses,
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to create expenses",
+        });
+    }
+};

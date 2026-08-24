@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllExpenses } from '../controllers/expenseController';
+import { createExpensesBulk, getAllExpenses } from '../controllers/expenseController';
 import { getExpenseById } from '../controllers/expenseController';
 import { createExpense } from '../controllers/expenseController';
 import { updateExpense } from '../controllers/expenseController';
@@ -19,6 +19,7 @@ router.get('/', getAllExpenses);
 router.get('/summary', getSummary);
 router.get('/filter', getExpensesByFilter);
 router.delete('/delete-all', deleteAllExpenses);
+router.post('/bulk', createExpensesBulk);
 router.get('/:id', getExpenseById);
 router.post('/', createExpense);
 router.put('/:id', updateExpense);

@@ -9,6 +9,7 @@ export type Category =
     | 'accommodation'
     | 'entertainment'
     | 'health'
+    | 'shopping'
     | 'salary'
     | 'other'
 
@@ -29,6 +30,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
     accommodation: 'ที่พัก',
     entertainment: 'บันเทิง',
     health: 'สุขภาพ',
+    shopping: 'ช้อปปิ้ง',
     salary: 'เงินเดือน',
     other: 'อื่นๆ',
 }
