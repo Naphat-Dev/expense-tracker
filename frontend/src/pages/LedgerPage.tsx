@@ -18,6 +18,7 @@ import { fetchProfile } from '../api/profile'
 import ProfileDropdown from '../components/ProfileDropdown'
 import ExpenseByCategoryChart from '../components/charts/ExpenseByCategoryChart'
 import IncomeExpenseChart from '../components/charts/IncomeExpenseChart'
+import MobileNavbar from '../components/MobileNavbar'
 
 
 
@@ -56,7 +57,7 @@ function App() {
                     if (!cancelled) setUserName(profile.name)
                     if (!cancelled) setUserEmail(profile.email)
                 } catch {
-                    
+
                 }
             })()
         return () => {
@@ -216,6 +217,25 @@ function App() {
         navigate('/login')
     }
 
+    const handleMobileNavigation = (id: string) => {
+        const element = document.getElementById(id)
+
+        if (!element) return
+
+        // ถ้าเป็น section ที่พับอยู่ ให้เปิดก่อน
+        if (element instanceof HTMLDetailsElement) {
+            element.open = true
+        }
+
+        // รอให้ DOM ขยายก่อนแล้วค่อย scroll
+        requestAnimationFrame(() => {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            })
+        })
+    }
+
 
     return (
         <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
@@ -247,25 +267,124 @@ function App() {
                 </p>
             ) : null}
 
-            <main className='mx-auto w-full min-w-0 max-w-6xl space-y-6'>
-                <IncomeExpenseChart expenses={chartExpenses} />
-                <SummaryCards income={summary.income} expense={summary.expense} balance={summary.balance} />
+            <main className="mx-auto w-full min-w-0 max-w-6xl">
 
-                <div className="grid gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-                    <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start space-y-4">
-                        <ExpenseForm addExpense={addExpense} />
-                        <ExpenseByCategoryChart expenses={chartExpenses} />
-                    </aside>
+                {/* ==================== MOBILE ==================== */}
+                <div className="space-y-4 lg:hidden">
 
-                    <section className="min-w-0 space-y-4">
-                        <ExpenseFilters filters={filters} setFilters={setFilters} DEFAULT_FILTERS={DEFAULT_FILTERS} />
-                        <ExpenseList expenses={expenses} deleteExpense={deleteExpense} updateExpense={updateExpense} />
-                    </section>
+                    {/* Add Expense - Collapsible */}
+                    <details id="add" className="rounded-card border border-line bg-surface shadow-card">
+                        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-ink">
+                            + เพิ่มรายการ
+                        </summary>
+
+                        <div className="border-t border-line p-4">
+                            <ExpenseForm addExpense={addExpense} />
+                        </div>
+                    </details>
+
+                    {/* Filters */}
+                    <div id="filters">
+                        <ExpenseFilters
+                            filters={filters}
+                            setFilters={setFilters}
+                            DEFAULT_FILTERS={DEFAULT_FILTERS}
+                        />
+                    </div>
+
+                    {/* Summary */}
+                    <div id="summary">
+                        <SummaryCards
+                            income={summary.income}
+                            expense={summary.expense}
+                            balance={summary.balance}
+                        />
+                    </div>
+
+                    <div id="expenses">
+                        <ExpenseList
+                            expenses={expenses}
+                            deleteExpense={deleteExpense}
+                            updateExpense={updateExpense}
+                        />
+                    </div>
+
+                    {/* Charts - Collapsible */}
+                    <details id="charts" className="scroll-mt-4 rounded-card border border-line bg-surface shadow-card"
+                        onToggle={(e) => {
+                            const details = e.currentTarget
+
+                            if (!details.open) return
+
+                            requestAnimationFrame(() => {
+                                details.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start',
+                                })
+                            })
+                        }}>
+                        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-ink">
+                            ดูสถิติและกราฟ
+                        </summary>
+
+                        <div className="space-y-4 border-t border-line">
+                            <IncomeExpenseChart expenses={chartExpenses} />
+
+                            <ExpenseByCategoryChart expenses={chartExpenses} />
+                        </div>
+                    </details>
+                    <MobileNavbar
+                        onNavigate={handleMobileNavigation}
+                    />
+                </div>
+
+
+                {/* ==================== DESKTOP ==================== */}
+                <div className="hidden space-y-6 lg:block">
+
+                    <IncomeExpenseChart expenses={chartExpenses} />
+
+                    <div className="grid gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
+
+                        {/* Sidebar */}
+                        <aside className="min-w-0 space-y-4 lg:sticky lg:top-6 lg:self-start">
+
+                            <ExpenseForm addExpense={addExpense} />
+
+                            <ExpenseByCategoryChart expenses={chartExpenses} />
+
+                        </aside>
+
+                        {/* Main content */}
+                        <section className="min-w-0 space-y-4">
+
+                            <ExpenseFilters
+                                filters={filters}
+                                setFilters={setFilters}
+                                DEFAULT_FILTERS={DEFAULT_FILTERS}
+                            />
+
+                            <SummaryCards
+                                income={summary.income}
+                                expense={summary.expense}
+                                balance={summary.balance}
+                            />
+
+                            <ExpenseList
+                                expenses={expenses}
+                                deleteExpense={deleteExpense}
+                                updateExpense={updateExpense}
+                            />
+
+                        </section>
+
+                    </div>
 
                 </div>
-            </main>
 
+            </main>
         </div>
+
     )
 
 }

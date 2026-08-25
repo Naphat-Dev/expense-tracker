@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDate, formatCurrencyCompact } from '../../utils/format';
+import { formatDate, formatCurrency, formatCurrencyCompact } from '../../utils/format';
 import { LucideEdit, LucideTrash } from 'lucide-react';
 import { CATEGORIES, CATEGORY_LABELS } from '../../types/expense';
 import type { Expense, ExpenseDraft } from '../../types/expense';
@@ -26,7 +26,7 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
     const [draft, setDraft] = useState<ExpenseDraft>({ category, note, amount, date, type })
 
     const updateField = (
-        fieldName: keyof ExpenseDraft, 
+        fieldName: keyof ExpenseDraft,
         value: ExpenseDraft[keyof ExpenseDraft]) => {
         setDraft((prev) => ({ ...prev, [fieldName]: value }))
     }
@@ -144,7 +144,18 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
                 </div>
                 <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                     <div className={`text-sm font-mono font-medium tabular-nums ${type === 'income' ? 'text-sage' : 'text-clay'}`}>
-                        {type === 'income' ? '+' : '-'}{formatCurrencyCompact(amount)}
+
+                        <span className="sm:hidden">
+                            {type === 'income' ? '+' : '-'}
+                            {formatCurrencyCompact(amount)}
+                        </span>
+
+                        <span className="hidden sm:inline">
+                            {type === 'income' ? '+' : '-'}
+                            {amount >= 1_000_000
+                                ? formatCurrencyCompact(amount)
+                                : formatCurrency(amount)}
+                        </span>
                     </div>
                     <button type="button" onClick={editHandler} className="rounded-lg p-1 text-muted transition hover:bg-paper hover:text-ink">
                         <LucideEdit size={16} />

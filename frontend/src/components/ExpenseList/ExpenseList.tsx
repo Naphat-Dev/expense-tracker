@@ -34,7 +34,7 @@ function ExpenseList({
     // แสดง 11 รายการแรก หรือแสดงทั้งหมด
     const expensesList = showAll
         ? expenses
-        : expenses.slice(0, 11)
+        : expenses.slice(0, 10)
 
     // กรณีไม่มีรายการ
     if (expensesList.length === 0) {
@@ -63,8 +63,8 @@ function ExpenseList({
                 ))}
             </div>
 
-            {/* Show All / Hide */}
-            {expenses.length > 11 && (
+            {/* แสดงทั้งหมด / ซ่อนรายการ */}
+            {expenses.length > 10 && (
                 <div className="mt-5 flex justify-center">
                     <button
                         type="button"
@@ -78,7 +78,7 @@ function ExpenseList({
                 </div>
             )}
 
-            {/* Scroll To Top */}
+            {/* กลับด้านบน */}
             {showScrollTop && (
                 <button
                     type="button"

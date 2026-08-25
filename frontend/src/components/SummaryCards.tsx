@@ -22,19 +22,31 @@ function SummaryCards({ income, expense, balance }: SummaryCardsProps) {
 
 
   return (
-    <div className='grid gap-4 grid-cols-1 sm:grid-cols-3'>
-      {cards.map((C) => {
-        const formatted = formatCurrencyCompact(C.value)
-        const fullAmount = formatCurrency(C.value)
+    <div className='grid grid-cols-3 gap-0 rounded-card border border-line bg-surface shadow-card sm:gap-4 sm:border-0 sm:bg-transparent sm:shadow-none'>
+      {cards.map((card) => {
+        const compactAmount = formatCurrencyCompact(card.value)
+        const fullAmount = formatCurrency(card.value)
 
         return (
-          <div key={C.label} className="min-w-0 rounded-card border border-line bg-surface p-5 shadow-card">
-            <h2 className='text-xs font-medium uppercase tracking-wide text-muted'>{C.label}</h2>
+          <div key={card.label} className="min-w-0 rounded-card border border-line bg-surface p-5 shadow-card">
+            <h2 className='text-xs font-medium uppercase tracking-wide text-muted'>{card.label}</h2>
+
+            {/* Mobile */}
             <p
-              className={`mt-2 font-mono text-base md:text-xl font-semibold tabular-nums leading-tight ${C.color}`}
+              className={`mt-1 font-mono text-base font-semibold leading-tight tabular-nums sm:hidden ${card.color}`}
               title={fullAmount}
             >
-              {formatted}
+              {compactAmount}
+            </p>
+
+            {/* Desktop */}
+            <p
+              className={`mt-2 hidden font-mono text-xl font-semibold leading-tight tabular-nums sm:block ${card.color}`}
+              title={fullAmount}
+            >
+              {card.value >= 1_000_000
+                ? compactAmount
+                : fullAmount}
             </p>
           </div>
         )

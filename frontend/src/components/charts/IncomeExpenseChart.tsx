@@ -27,19 +27,19 @@ const PERIOD_OPTIONS: {
   value: MonthlyChartPeriod
   label: string
 }[] = [
-  {
-    value: 'lastmonth',
-    label: 'เดือนที่แล้ว',
-  },
-  {
-    value: '6months',
-    label: '6 เดือน',
-  },
-  {
-    value: '1year',
-    label: '1 ปี',
-  },
-]
+    {
+      value: 'lastmonth',
+      label: 'เดือนที่แล้ว',
+    },
+    {
+      value: '6months',
+      label: '6 เดือน',
+    },
+    {
+      value: '1year',
+      label: '1 ปี',
+    },
+  ]
 
 export default function IncomeExpenseChart({
   expenses,
@@ -53,7 +53,7 @@ export default function IncomeExpenseChart({
   )
 
   return (
-    <section className="rounded-2xl border border-line bg-paper p-6 font-body">
+    <section className="rounded-2xl border border-line bg-paper p-4 sm:p-6 font-body">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-ink">
@@ -71,11 +71,10 @@ export default function IncomeExpenseChart({
               key={option.value}
               type="button"
               onClick={() => setPeriod(option.value)}
-              className={`flex-1 rounded-md px-3 py-1.5 text-sm transition sm:flex-none ${
-                period === option.value
+              className={`flex-1 rounded-md px-3 py-1.5 text-sm transition sm:flex-none ${period === option.value
                   ? 'bg-ink text-white'
                   : 'text-muted hover:text-ink'
-              }`}
+                }`}
             >
               {option.label}
             </button>
