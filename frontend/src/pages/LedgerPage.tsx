@@ -273,7 +273,7 @@ function App() {
                 <div className="space-y-4 lg:hidden">
 
                     {/* Add Expense - Collapsible */}
-                    <details id="add" className="rounded-card border border-line bg-surface shadow-card">
+                    <details id="add" className="scroll-mt-4 rounded-card border border-line bg-surface shadow-card">
                         <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-ink">
                             + เพิ่มรายการ
                         </summary>
@@ -284,7 +284,7 @@ function App() {
                     </details>
 
                     {/* Filters */}
-                    <div id="filters">
+                    <div id="filters" className="scroll-mt-4">
                         <ExpenseFilters
                             filters={filters}
                             setFilters={setFilters}
@@ -293,7 +293,7 @@ function App() {
                     </div>
 
                     {/* Summary */}
-                    <div id="summary">
+                    <div id="summary" className="scroll-mt-4">
                         <SummaryCards
                             income={summary.income}
                             expense={summary.expense}
@@ -301,7 +301,7 @@ function App() {
                         />
                     </div>
 
-                    <div id="expenses">
+                    <div id="expenses" className="scroll-mt-4">
                         <ExpenseList
                             expenses={expenses}
                             deleteExpense={deleteExpense}
