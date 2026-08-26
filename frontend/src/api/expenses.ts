@@ -73,7 +73,7 @@ export async function updateExpenseApi(
 ): Promise<Expense> {
   const data = await apiFetch<unknown>(`/api/expenses/${id}`, {
     method: 'PUT',
-    ...jsonBody(draft),
+    ...jsonBody({ ...draft, amount: Number(draft.amount) }),
   })
   return toExpense(data)
 }
