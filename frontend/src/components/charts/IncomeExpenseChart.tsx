@@ -82,7 +82,7 @@ export default function IncomeExpenseChart({
         </div>
       </div>
 
-      <div className="h-[320px]">
+      <div className="h-[320px] [&_*:focus]:outline-none">
         <ResponsiveContainer
           width="100%"
           height="100%"

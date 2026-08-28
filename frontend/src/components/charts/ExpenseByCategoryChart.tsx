@@ -95,7 +95,7 @@ export default function ExpenseByCategoryChart({
   const topCategory = data[0]
 
   return (
-    <ChartCard
+    <ChartCard 
       title="รายจ่ายตามหมวดหมู่"
       subtitle={
         totalExpense > 0
@@ -111,7 +111,7 @@ export default function ExpenseByCategoryChart({
       empty={data.length === 0}
       emptyMessage="ยังไม่มีรายจ่ายในช่วงที่เลือก"
     >
-      <div className="h-64 w-full">
+      <div className="h-64 w-full [&_*:focus]:outline-none">
         <ResponsiveContainer
           width="100%"
           height="100%"
