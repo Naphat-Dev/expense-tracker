@@ -1,6 +1,8 @@
 import Expense from '../models/Expense';
 import { Request, Response } from 'express';
 import { getTimeRangeBounds } from '../utils/date';
+import { CATEGORY_SEARCH_MAP } from '../utils/category';
+
 
 export const getAllExpenses = async (req: Request, res: Response) => {
     try {
@@ -173,19 +175,31 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
 
 
         if (search) {
+            const searchText = String(search).trim().toLowerCase();
+
+            const matchedCategories = Object.entries(CATEGORY_SEARCH_MAP)
+                .filter(([label, value]) =>
+                    label.toLowerCase().includes(searchText) ||
+                    value.toLowerCase().includes(searchText)
+                )
+                .map(([, value]) => value);
+
             filter.$or = [
                 {
                     note: {
-                        $regex: search,
+                        $regex: searchText,
                         $options: "i",
                     },
                 },
-                {
-                    category: {
-                        $regex: search,
-                        $options: "i",
-                    },
-                },
+                ...(matchedCategories.length > 0
+                    ? [
+                        {
+                            category: {
+                                $in: matchedCategories,
+                            },
+                        },
+                    ]
+                    : []),
             ];
         }
 
