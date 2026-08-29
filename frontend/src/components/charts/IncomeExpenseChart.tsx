@@ -72,8 +72,8 @@ export default function IncomeExpenseChart({
               type="button"
               onClick={() => setPeriod(option.value)}
               className={`flex-1 rounded-md px-3 py-1.5 text-sm transition sm:flex-none ${period === option.value
-                  ? 'bg-ink text-white'
-                  : 'text-muted hover:text-ink'
+                ? 'bg-ink text-white'
+                : 'text-muted hover:text-ink'
                 }`}
             >
               {option.label}
@@ -144,11 +144,37 @@ export default function IncomeExpenseChart({
             />
 
             <Legend
-              formatter={(value) =>
-                value === 'income'
-                  ? 'รายรับ'
-                  : 'รายจ่าย'
-              }
+              content={({ payload }) => {
+                if (!payload) return null
+
+                const sortedPayload = [...payload].sort((a, b) => {
+                  if (a.dataKey === 'income') return -1
+                  if (b.dataKey === 'income') return 1
+                  return 0
+                })
+
+                return (
+                  <div className="flex justify-center gap-4">
+                    {sortedPayload.map((entry) => (
+                      <div
+                        key={String(entry.dataKey)}
+                        className="flex items-center gap-1.5 text-xs text-muted"
+                      >
+                        <span
+                          className="h-2.5 w-2.5 rounded-sm"
+                          style={{ backgroundColor: entry.color }}
+                        />
+
+                        <span>
+                          {entry.dataKey === 'income'
+                            ? 'รายรับ'
+                            : 'รายจ่าย'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )
+              }}
             />
 
             <Bar
