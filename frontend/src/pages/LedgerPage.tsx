@@ -28,6 +28,9 @@ const DEFAULT_FILTERS: ExpenseFiltersState = {
     type: 'all',
     category: 'all',
     timeRange: 'all',
+    selectedMonth: '',
+    startDate: '',
+    endDate: '',
     sort: 'date-desc',
 }
 
@@ -36,6 +39,9 @@ const CHART_FILTERS: ExpenseFiltersState = {
     type: 'all',
     category: 'all',
     timeRange: 'all',
+    selectedMonth: '',
+    startDate: '',
+    endDate: '',
     sort: 'date-asc',
 }
 

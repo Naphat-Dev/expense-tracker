@@ -158,6 +158,9 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
             type,
             category,
             timeRange,
+            month,
+            startDate,
+            endDate,
             sort,
         } = req.query;
 
@@ -205,8 +208,42 @@ export const getExpensesByFilter = async (req: Request, res: Response) => {
 
 
         if (timeRange && timeRange !== "all") {
-            const { startDate, endDate } = getTimeRangeBounds(String(timeRange));
-            filter.date = { $gte: startDate, $lt: endDate };
+
+            if (timeRange === "month" && month) {
+                const [year, monthNumber] = String(month)
+                    .split("-")
+                    .map(Number);
+
+                const start = new Date(year, monthNumber - 1, 1);
+                const end = new Date(year, monthNumber, 1);
+
+                filter.date = {
+                    $gte: start,
+                    $lt: end,
+                };
+            }
+
+            else if (timeRange === "custom" && startDate && endDate) {
+                const start = new Date(String(startDate));
+
+                // +1 วัน เพื่อให้รวมวันที่สิ้นสุดด้วย
+                const end = new Date(String(endDate));
+                end.setDate(end.getDate() + 1);
+
+                filter.date = {
+                    $gte: start,
+                    $lt: end,
+                };
+            }
+
+            else {
+                const bounds = getTimeRangeBounds(String(timeRange));
+
+                filter.date = {
+                    $gte: bounds.startDate,
+                    $lt: bounds.endDate,
+                };
+            }
         }
 
         // Query

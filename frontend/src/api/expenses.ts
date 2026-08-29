@@ -88,13 +88,42 @@ export async function fetchExpenseSummary(): Promise<ExpenseSummary> {
 export async function fetchExpensesByFilter(
   filters: ExpenseFiltersState,
 ): Promise<Expense[]> {
-  const params = new URLSearchParams(
-    Object.entries(filters).reduce((acc, [key, value]) => {
-      acc[key] = String(value)
-      return acc
-    }, {} as Record<string, string>),
+  const params = new URLSearchParams()
+
+  if (filters.search) {
+    params.set('search', filters.search)
+  }
+
+  if (filters.type !== 'all') {
+    params.set('type', filters.type)
+  }
+
+  if (filters.category !== 'all') {
+    params.set('category', filters.category)
+  }
+
+  params.set('timeRange', filters.timeRange)
+
+  if (filters.timeRange === 'month' && filters.selectedMonth) {
+    params.set('month', filters.selectedMonth)
+  }
+
+  if (filters.timeRange === 'custom') {
+    if (filters.startDate) {
+      params.set('startDate', filters.startDate)
+    }
+
+    if (filters.endDate) {
+      params.set('endDate', filters.endDate)
+    }
+  }
+
+  params.set('sort', filters.sort)
+
+  const data = await apiFetch<unknown[]>(
+    `/api/expenses/filter?${params.toString()}`
   )
-  const data = await apiFetch<unknown[]>(`/api/expenses/filter?${params}`)
+
   return data.map(toExpense)
 }
 
