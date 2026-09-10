@@ -55,5 +55,3 @@ export async function registerApi(payload: RegisterPayload): Promise<AuthUser> {
 export function logout(): void {
   clearToken()
 }
-
-export { isAuthenticated } from './http'

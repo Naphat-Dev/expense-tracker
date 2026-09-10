@@ -5,6 +5,7 @@ import { ArrowLeft, Check, Eye, EyeOff, Pencil, X } from 'lucide-react'
 import InitialAvatar from '../components/InitialAvatar'
 import { fetchProfile, updateProfileName, changePassword } from '../api/profile'
 import type { ProfileUser } from '../types/profile'
+import { logout } from '../api/auth'
 
 type Tab = 'general' | 'security'
 
@@ -86,6 +87,8 @@ function ProfilePage() {
             setCurrentPassword('')
             setNewPassword('')
             setConfirmPassword('')
+            logout()
+            navigate('/login')
         } catch (err) {
             await Swal.fire({
                 icon: 'error',
@@ -140,21 +143,19 @@ function ProfilePage() {
                 <div className="mb-6 flex gap-1 border-b border-line">
                     <button
                         onClick={() => setActiveTab('general')}
-                        className={`px-4 py-2.5 text-sm font-medium transition ${
-                            activeTab === 'general'
+                        className={`px-4 py-2.5 text-sm font-medium transition ${activeTab === 'general'
                                 ? 'border-b-2 border-primary text-ink'
                                 : 'border-b-2 border-transparent text-muted hover:text-ink'
-                        }`}
+                            }`}
                     >
                         ทั่วไป
                     </button>
                     <button
                         onClick={() => setActiveTab('security')}
-                        className={`px-4 py-2.5 text-sm font-medium transition ${
-                            activeTab === 'security'
+                        className={`px-4 py-2.5 text-sm font-medium transition ${activeTab === 'security'
                                 ? 'border-b-2 border-primary text-ink'
                                 : 'border-b-2 border-transparent text-muted hover:text-ink'
-                        }`}
+                            }`}
                     >
                         ความปลอดภัย
                     </button>
@@ -273,13 +274,12 @@ function ProfilePage() {
                                     </button>
                                 </div>
                                 <p
-                                    className={`mt-1.5 flex items-center gap-1 text-xs ${
-                                        newPassword.length === 0
+                                    className={`mt-1.5 flex items-center gap-1 text-xs ${newPassword.length === 0
                                             ? 'text-muted'
                                             : hasMinLength
-                                              ? 'text-sage'
-                                              : 'text-clay'
-                                    }`}
+                                                ? 'text-sage'
+                                                : 'text-clay'
+                                        }`}
                                 >
                                     {newPassword.length > 0 && hasMinLength ? <Check size={12} /> : null}
                                     อย่างน้อย 8 ตัวอักษร
@@ -298,9 +298,8 @@ function ProfilePage() {
                                 />
                                 {confirmPassword.length > 0 ? (
                                     <p
-                                        className={`mt-1.5 flex items-center gap-1 text-xs ${
-                                            passwordsMatch ? 'text-sage' : 'text-clay'
-                                        }`}
+                                        className={`mt-1.5 flex items-center gap-1 text-xs ${passwordsMatch ? 'text-sage' : 'text-clay'
+                                            }`}
                                     >
                                         {passwordsMatch ? <Check size={12} /> : null}
                                         {passwordsMatch ? 'รหัสผ่านตรงกัน' : 'รหัสผ่านไม่ตรงกัน'}

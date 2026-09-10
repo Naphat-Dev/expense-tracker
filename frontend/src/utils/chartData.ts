@@ -59,24 +59,6 @@ export type MonthlyChartPeriod =
   | '6months'
   | '1year'
 
-export const MONTHLY_CHART_PERIOD_OPTIONS: {
-  value: MonthlyChartPeriod
-  label: string
-}[] = [
-  {
-    value: 'lastmonth',
-    label: 'เดือนที่แล้ว',
-  },
-  {
-    value: '6months',
-    label: '6 เดือน',
-  },
-  {
-    value: '1year',
-    label: '1 ปี',
-  },
-]
-
 export type MonthlyIncomeExpense = {
   month: string
   income: number

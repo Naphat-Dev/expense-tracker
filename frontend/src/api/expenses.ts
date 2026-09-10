@@ -48,15 +48,6 @@ function toExpense(raw: unknown): Expense {
 // ---------- Public API ----------
 
 
-
-
-
-/** ดึงรายการทั้งหมด */
-export async function fetchExpenses(): Promise<Expense[]> {
-  const data = await apiFetch<unknown[]>('/api/expenses')
-  return data.map(toExpense)
-}
-
 /** สร้างรายการใหม่ */
 export async function createExpense(draft: ExpenseDraft): Promise<Expense> {
   const data = await apiFetch<unknown>('/api/expenses', {
@@ -78,11 +69,6 @@ export async function updateExpenseApi(
   return toExpense(data)
 }
 
-/** สรุปรายรับ-รายจ่ายทั้งหมด */
-export async function fetchExpenseSummary(): Promise<ExpenseSummary> {
-  const data = await apiFetch<unknown>('/api/expenses/summary')
-  return SummarySchema.parse(data)
-}
 
 /** ดึงรายการตามเงื่อนไข */
 export async function fetchExpensesByFilter(

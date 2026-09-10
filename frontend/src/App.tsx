@@ -5,7 +5,6 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import LedgerPage from './pages/LedgerPage'  
 import ProfilePage from './pages/ProfilePage'
-import './App.css'
 
 function App() {
   return (

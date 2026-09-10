@@ -5,13 +5,13 @@ import SummaryCards from '../components/SummaryCards'
 import ExpenseList from '../components/ExpenseList/ExpenseList'
 import ExpenseFilters from '../components/ExpenseFilters'
 import type { ExpenseFiltersState } from '../types/filter'
+import { logout } from '../api/auth'
 import {
     createExpense,
     deleteExpenseApi,
     fetchExpensesByFilter,
     updateExpenseApi,
 } from '../api/expenses'
-import '../App.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
@@ -219,7 +219,7 @@ function App() {
 
         if (!result.isConfirmed) return
 
-        localStorage.removeItem('token')
+        logout()
         navigate('/login')
     }
 
