@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CATEGORIES, type Expense, type ExpenseDraft, type ExpenseSummary } from '../types/expense'
+import { CATEGORIES, type Expense, type ExpenseDraft } from '../types/expense'
 import type { ExpenseFiltersState } from '../types/filter'
 import { apiFetch, jsonBody } from './http'
 
@@ -15,12 +15,6 @@ const ExpenseApiDocSchema = z.object({
   date: z.string(),
   category: z.enum(CATEGORIES),
   note: z.string().optional(),
-})
-
-const SummarySchema = z.object({
-  income: z.number(),
-  expense: z.number(),
-  balance: z.number(),
 })
 
 // ---------- Mapper ----------
