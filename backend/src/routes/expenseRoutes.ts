@@ -5,7 +5,6 @@ import { createExpense } from '../controllers/expenseController';
 import { updateExpense } from '../controllers/expenseController';
 import { deleteAllExpenses } from '../controllers/expenseController';
 import { deleteExpense } from '../controllers/expenseController';
-import { getSummary } from '../controllers/expenseController';
 import { getExpensesByFilter } from '../controllers/expenseController';
 import { requireAuth } from '../middleware/auth';
 
@@ -16,7 +15,6 @@ router.use(requireAuth);
 
 
 router.get('/', getAllExpenses);
-router.get('/summary', getSummary);
 router.get('/filter', getExpensesByFilter);
 router.delete('/delete-all', deleteAllExpenses);
 router.post('/bulk', createExpensesBulk);

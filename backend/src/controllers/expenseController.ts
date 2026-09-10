@@ -121,34 +121,6 @@ export const deleteAllExpenses = async (req: Request, res: Response) => {
     }
 };
 
-export const getSummary = async (req: Request, res: Response) => {
-    try {
-        const expenses = await Expense.find({
-            user: req.userId,
-        });
-
-        const income = expenses
-            .filter(expense => expense.type === "income")
-            .reduce((total, expense) => total + expense.amount, 0);
-
-        const expense = expenses
-            .filter(expense => expense.type === "expense")
-            .reduce((total, expense) => total + expense.amount, 0);
-
-        res.status(200).json({
-            income,
-            expense,
-            balance: income - expense,
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            message: "Failed to get summary",
-        });
-    }
-};
 
 
 export const getExpensesByFilter = async (req: Request, res: Response) => {
