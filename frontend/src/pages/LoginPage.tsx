@@ -105,7 +105,7 @@ export default function LoginPage() {
           </button>
 
           <p className="text-center text-xs text-ink/50">
-            ไม่ต้องสมัครสมาชิก · มีข้อมูลตัวอย่างให้ทดลอง
+            บัญชี Demo พร้อมข้อมูลตัวอย่างสำหรับทดลองใช้งาน
           </p>
         </div>
       </form>
