@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,6 +23,28 @@ export default function LoginPage() {
       setError(err instanceof Error ? err.message : 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDemoLogin = async () => {
+    setError(null)
+    setDemoLoading(true)
+
+    try {
+      await loginApi({
+        email: 'demo@example.com',
+        password: '11111111',
+      })
+
+      navigate('/')
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'ไม่สามารถเข้าสู่ระบบ Demo ได้'
+      )
+    } finally {
+      setDemoLoading(false)
     }
   }
 
@@ -57,13 +80,34 @@ export default function LoginPage() {
           </p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-primary py-2.5 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60 md:py-3 md:text-base"
-        >
-          {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
-        </button>
+        <div className="space-y-3">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-md bg-primary py-2.5 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60 md:py-3 md:text-base"
+          >
+            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+          </button>
+
+          <div className="relative flex items-center">
+            <div className="flex-1 border-t border-line" />
+            <span className="px-3 text-xs text-ink/40">หรือ</span>
+            <div className="flex-1 border-t border-line" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={demoLoading}
+            className="w-full rounded-md border border-line bg-paper py-2.5 text-sm font-medium text-ink transition hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60 md:py-3 md:text-base"
+          >
+            {demoLoading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ Demo'}
+          </button>
+
+          <p className="text-center text-xs text-ink/50">
+            ไม่ต้องสมัครสมาชิก · มีข้อมูลตัวอย่างให้ทดลอง
+          </p>
+        </div>
       </form>
 
       <p className="mt-6 text-center text-xs text-ink/60 md:mt-8 md:text-sm">

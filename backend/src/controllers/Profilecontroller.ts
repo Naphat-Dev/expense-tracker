@@ -24,6 +24,7 @@ export const getProfile = async (req: Request, res: Response) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            isDemo: user.isDemo,
         });
 
     } catch (error) {
@@ -45,17 +46,22 @@ export const updateProfile = async (req: Request<{}, {}, UpdateProfileBody>, res
             });
         }
 
-        const user = await User.findByIdAndUpdate(
-            req.userId,
-            { name: name.trim() },
-            { new: true },
-        );
+        const user = await User.findById(req.userId);
 
         if (!user) {
             return res.status(404).json({
                 message: 'ไม่พบผู้ใช้งาน',
             });
         }
+
+        if (user.isDemo) {
+            return res.status(403).json({
+                message: 'บัญชี Demo ไม่สามารถเปลี่ยนชื่อได้',
+            });
+        }
+
+        user.name = name.trim();
+        await user.save();
 
         res.status(200).json({
             _id: user._id,
@@ -93,6 +99,12 @@ export const changePassword = async (req: Request<{}, {}, ChangePasswordBody>, r
         if (!user) {
             return res.status(404).json({
                 message: 'ไม่พบผู้ใช้งาน',
+            });
+        }
+
+        if (user.isDemo) {
+            return res.status(403).json({
+                message: 'บัญชี Demo ไม่สามารถเปลี่ยนรหัสผ่านได้',
             });
         }
 

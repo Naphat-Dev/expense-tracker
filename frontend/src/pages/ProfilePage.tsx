@@ -58,7 +58,7 @@ function ProfilePage() {
     const hasNameChanged = user ? nameDraft.trim() !== user.name && nameDraft.trim().length > 0 : false
 
     const handleSaveName = async () => {
-        if (!nameDraft.trim() || isSavingName) return
+        if (user?.isDemo || !nameDraft.trim() || isSavingName) return
 
         setIsSavingName(true)
         try {
@@ -78,7 +78,7 @@ function ProfilePage() {
     }
 
     const handleChangePassword = async () => {
-        if (!canSubmitPassword || isSavingPassword) return
+        if (user?.isDemo || !canSubmitPassword || isSavingPassword) return
 
         setIsSavingPassword(true)
         try {
@@ -144,8 +144,8 @@ function ProfilePage() {
                     <button
                         onClick={() => setActiveTab('general')}
                         className={`px-4 py-2.5 text-sm font-medium transition ${activeTab === 'general'
-                                ? 'border-b-2 border-primary text-ink'
-                                : 'border-b-2 border-transparent text-muted hover:text-ink'
+                            ? 'border-b-2 border-primary text-ink'
+                            : 'border-b-2 border-transparent text-muted hover:text-ink'
                             }`}
                     >
                         ทั่วไป
@@ -153,8 +153,8 @@ function ProfilePage() {
                     <button
                         onClick={() => setActiveTab('security')}
                         className={`px-4 py-2.5 text-sm font-medium transition ${activeTab === 'security'
-                                ? 'border-b-2 border-primary text-ink'
-                                : 'border-b-2 border-transparent text-muted hover:text-ink'
+                            ? 'border-b-2 border-primary text-ink'
+                            : 'border-b-2 border-transparent text-muted hover:text-ink'
                             }`}
                     >
                         ความปลอดภัย
@@ -201,15 +201,27 @@ function ProfilePage() {
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="text-lg font-semibold text-ink">{user.name}</h3>
-                                        <button
-                                            onClick={() => setIsEditingName(true)}
-                                            aria-label="แก้ไขชื่อ"
-                                            className="flex h-6 w-6 items-center justify-center rounded-lg text-muted transition hover:bg-paper hover:text-ink"
-                                        >
-                                            <Pencil size={13} />
-                                        </button>
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-lg font-semibold text-ink">
+                                                {user.name}
+                                            </h3>
+
+                                            <button
+                                                onClick={() => setIsEditingName(true)}
+                                                disabled={user.isDemo}
+                                                aria-label="แก้ไขชื่อ"
+                                                className="flex h-6 w-6 items-center justify-center rounded-lg text-muted transition hover:bg-paper hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+                                            >
+                                                <Pencil size={13} />
+                                            </button>
+                                        </div>
+
+                                        {user.isDemo && (
+                                            <p className="mt-1 text-xs text-muted">
+                                                บัญชี Demo ไม่สามารถเปลี่ยนชื่อได้
+                                            </p>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -235,85 +247,101 @@ function ProfilePage() {
                         </div>
 
                         <div className="flex flex-col gap-4 px-6 py-6">
-                            <div>
-                                <label className="mb-1.5 block text-xs font-medium text-muted">รหัสผ่านเดิม</label>
-                                <div className="relative">
-                                    <input
-                                        type={showCurrentPassword ? 'text' : 'password'}
-                                        value={currentPassword}
-                                        onChange={(e) => setCurrentPassword(e.target.value)}
-                                        className="w-full rounded-lg border border-line bg-paper px-3 py-2 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                                    />
+                            {user.isDemo ? (
+                                <div className="px-6 py-6">
+                                    <div className="rounded-lg border border-line bg-paper p-4">
+                                        <p className="text-sm font-medium text-ink">
+                                            บัญชี Demo
+                                        </p>
+
+                                        <p className="mt-1 text-sm text-muted">
+                                            บัญชี Demo ไม่สามารถเปลี่ยนรหัสผ่านได้
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-4 px-6 py-6">
+                                    <div>
+                                        <label className="mb-1.5 block text-xs font-medium text-muted">รหัสผ่านเดิม</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showCurrentPassword ? 'text' : 'password'}
+                                                value={currentPassword}
+                                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                                className="w-full rounded-lg border border-line bg-paper px-3 py-2 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowCurrentPassword((prev) => !prev)}
+                                                aria-label={showCurrentPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                                            >
+                                                {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="mb-1.5 block text-xs font-medium text-muted">รหัสผ่านใหม่</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showNewPassword ? 'text' : 'password'}
+                                                value={newPassword}
+                                                onChange={(e) => setNewPassword(e.target.value)}
+                                                className="w-full rounded-lg border border-line bg-paper px-3 py-2 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNewPassword((prev) => !prev)}
+                                                aria-label={showNewPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                                            >
+                                                {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                            </button>
+                                        </div>
+                                        <p
+                                            className={`mt-1.5 flex items-center gap-1 text-xs ${newPassword.length === 0
+                                                ? 'text-muted'
+                                                : hasMinLength
+                                                    ? 'text-sage'
+                                                    : 'text-clay'
+                                                }`}
+                                        >
+                                            {newPassword.length > 0 && hasMinLength ? <Check size={12} /> : null}
+                                            อย่างน้อย 8 ตัวอักษร
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <label className="mb-1.5 block text-xs font-medium text-muted">
+                                            ยืนยันรหัสผ่านใหม่
+                                        </label>
+                                        <input
+                                            type={showNewPassword ? 'text' : 'password'}
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            className="w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                        />
+                                        {confirmPassword.length > 0 ? (
+                                            <p
+                                                className={`mt-1.5 flex items-center gap-1 text-xs ${passwordsMatch ? 'text-sage' : 'text-clay'
+                                                    }`}
+                                            >
+                                                {passwordsMatch ? <Check size={12} /> : null}
+                                                {passwordsMatch ? 'รหัสผ่านตรงกัน' : 'รหัสผ่านไม่ตรงกัน'}
+                                            </p>
+                                        ) : null}
+                                    </div>
+
                                     <button
-                                        type="button"
-                                        onClick={() => setShowCurrentPassword((prev) => !prev)}
-                                        aria-label={showCurrentPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                                        onClick={handleChangePassword}
+                                        disabled={!canSubmitPassword || isSavingPassword}
+                                        className="mt-2 self-start rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40"
                                     >
-                                        {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        {isSavingPassword ? 'กำลังบันทึก...' : 'เปลี่ยนรหัสผ่าน'}
                                     </button>
                                 </div>
-                            </div>
-
-                            <div>
-                                <label className="mb-1.5 block text-xs font-medium text-muted">รหัสผ่านใหม่</label>
-                                <div className="relative">
-                                    <input
-                                        type={showNewPassword ? 'text' : 'password'}
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        className="w-full rounded-lg border border-line bg-paper px-3 py-2 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowNewPassword((prev) => !prev)}
-                                        aria-label={showNewPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
-                                    >
-                                        {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                                    </button>
-                                </div>
-                                <p
-                                    className={`mt-1.5 flex items-center gap-1 text-xs ${newPassword.length === 0
-                                            ? 'text-muted'
-                                            : hasMinLength
-                                                ? 'text-sage'
-                                                : 'text-clay'
-                                        }`}
-                                >
-                                    {newPassword.length > 0 && hasMinLength ? <Check size={12} /> : null}
-                                    อย่างน้อย 8 ตัวอักษร
-                                </p>
-                            </div>
-
-                            <div>
-                                <label className="mb-1.5 block text-xs font-medium text-muted">
-                                    ยืนยันรหัสผ่านใหม่
-                                </label>
-                                <input
-                                    type={showNewPassword ? 'text' : 'password'}
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                                />
-                                {confirmPassword.length > 0 ? (
-                                    <p
-                                        className={`mt-1.5 flex items-center gap-1 text-xs ${passwordsMatch ? 'text-sage' : 'text-clay'
-                                            }`}
-                                    >
-                                        {passwordsMatch ? <Check size={12} /> : null}
-                                        {passwordsMatch ? 'รหัสผ่านตรงกัน' : 'รหัสผ่านไม่ตรงกัน'}
-                                    </p>
-                                ) : null}
-                            </div>
-
-                            <button
-                                onClick={handleChangePassword}
-                                disabled={!canSubmitPassword || isSavingPassword}
-                                className="mt-2 self-start rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40"
-                            >
-                                {isSavingPassword ? 'กำลังบันทึก...' : 'เปลี่ยนรหัสผ่าน'}
-                            </button>
+                            )}
                         </div>
                     </section>
                 )}
