@@ -5,9 +5,11 @@ interface SummaryCardsProps {
   income: number
   expense: number
   balance: number
+  isLoading?: boolean
+  isError?: boolean
 }
 
-function SummaryCards({ income, expense, balance }: SummaryCardsProps) {
+function SummaryCards({ income, expense, balance, isLoading = false, isError = false }: SummaryCardsProps) {
 
   const cards = [
     { label: 'รายรับ', value: income, color: 'text-sage' },
@@ -22,21 +24,26 @@ function SummaryCards({ income, expense, balance }: SummaryCardsProps) {
 
 
   return (
-    <div className='grid grid-cols-3 gap-0 rounded-card border border-line bg-surface shadow-card sm:gap-4 sm:border-0 sm:bg-transparent sm:shadow-none'>
+    <section aria-label="สรุปการเงิน" aria-busy={isLoading} className="grid grid-cols-3 gap-2 sm:gap-4">
       {cards.map((card) => {
         const compactAmount = formatCurrencyCompact(card.value)
         const fullAmount = formatCurrency(card.value)
 
         return (
-          <div key={card.label} className="min-w-0 rounded-card border border-line bg-surface p-5 shadow-card">
-            <h2 className='text-xs font-medium uppercase tracking-wide text-muted'>{card.label}</h2>
+          <div
+            key={card.label}
+            className="min-w-0 rounded-card border border-line bg-surface p-3 shadow-card sm:p-5"
+          >
+            <h2 className="text-xs font-medium uppercase tracking-wide text-muted">
+              {card.label}
+            </h2>
 
             {/* Mobile */}
             <p
-              className={`mt-1 font-mono text-base font-semibold leading-tight tabular-nums sm:hidden ${card.color}`}
+              className={`mt-1 font-mono text-sm font-semibold leading-tight tabular-nums sm:hidden ${card.color}`}
               title={fullAmount}
             >
-              {compactAmount}
+              {isLoading ? <span className="block h-5 w-24 animate-pulse rounded-full bg-line" /> : isError ? '—' : compactAmount}
             </p>
 
             {/* Desktop */}
@@ -44,14 +51,14 @@ function SummaryCards({ income, expense, balance }: SummaryCardsProps) {
               className={`mt-2 hidden font-mono text-xl font-semibold leading-tight tabular-nums sm:block ${card.color}`}
               title={fullAmount}
             >
-              {card.value >= 1_000_000
-                ? compactAmount
-                : fullAmount}
+              {isLoading ? (
+                <span className="block h-6 w-32 animate-pulse rounded-full bg-line" />
+              ) : isError ? '—' : card.value >= 1_000_000 ? compactAmount : fullAmount}
             </p>
           </div>
         )
       })}
-    </div>
+    </section>
   )
 }
 

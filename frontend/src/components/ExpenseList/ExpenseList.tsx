@@ -6,6 +6,9 @@ type ExpenseListProps = {
     expenses: Expense[]
     deleteExpense: (id: string) => void
     updateExpense: (id: string, draft: ExpenseDraft) => void
+    isLoading?: boolean
+    isError?: boolean
+    emptyMessage?: string
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -14,6 +17,9 @@ function ExpenseList({
     expenses,
     deleteExpense,
     updateExpense,
+    isLoading = false,
+    isError = false,
+    emptyMessage = 'ยังไม่มีรายการ — เพิ่มรายการแรกของคุณ',
 }: ExpenseListProps) {
 
     const [editingId, setEditingId] = useState<string | null>(null)
@@ -48,11 +54,37 @@ function ExpenseList({
     }, [])
 
 
+    if (isLoading) {
+        return (
+            <section className="mt-5" aria-busy="true" aria-live="polite">
+                <div className="mb-3 flex items-center justify-between px-1">
+                    <h2 className="text-sm font-semibold text-ink">รายการทั้งหมด</h2>
+                    <span className="text-xs text-muted">กำลังโหลด…</span>
+                </div>
+                <div className="flex min-w-0 flex-col gap-3">
+                    {Array.from({ length: 4 }, (_, index) => (
+                        <div key={index} className="flex h-[72px] animate-pulse items-center justify-between rounded-card border border-line bg-surface px-4 shadow-card sm:px-6">
+                            <div className="space-y-2">
+                                <div className="h-3 w-32 rounded-full bg-line" />
+                                <div className="h-3 w-20 rounded-full bg-line" />
+                            </div>
+                            <div className="h-4 w-16 rounded-full bg-line" />
+                        </div>
+                    ))}
+                </div>
+            </section>
+        )
+    }
+
+    if (isError) return null
+
     // กรณีไม่มีรายการ
+    if (paginatedExpenses.length === 0 && !emptyMessage) return null
+
     if (paginatedExpenses.length === 0) {
         return (
-            <div className="rounded-card border border-dashed border-line bg-surface p-8 text-center text-sm text-muted shadow-card">
-                ยังไม่มีรายการ — เพิ่มรายการแรกของคุณ
+            <div className="rounded-card border border-dashed border-line bg-surface p-8 text-center text-sm text-muted shadow-card" role="status">
+                {emptyMessage}
             </div>
         )
     }
@@ -171,7 +203,7 @@ function ExpenseList({
                             behavior: 'smooth',
                         })
                     }
-                    className="fixed bottom-17 left-1/2 z-50 -translate-x-1/2 rounded-full border border-line bg-surface p-3 text-ink shadow-elevated transition hover:bg-paper sm:bottom-6 sm:left-auto sm:right-6 sm:translate-x-0"
+                    className="fixed bottom-20 left-1/2 z-50 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-line bg-surface text-ink shadow-elevated transition hover:bg-paper sm:bottom-6 sm:left-auto sm:right-6 sm:translate-x-0"
                     aria-label="กลับด้านบน"
                 >
                     ↑

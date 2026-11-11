@@ -15,7 +15,7 @@ type ExpenseItemProps = {
 }
 
 const FIELD_CLASS =
-    'min-w-0 rounded-lg border border-line bg-paper px-2 py-1.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20';
+    'min-w-0 rounded-lg border border-line bg-paper px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20';
 
 
 function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExpense, updateExpense }: ExpenseItemProps) {
@@ -113,16 +113,16 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
                         <button
                             type="button"
                             onClick={saveHandler}
-                            className="shrink-0 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white transition hover:bg-primary-dark"
+                            className="min-h-11 shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-dark"
                         >
-                            Save
+                            บันทึก
                         </button>
                         <button
                             type="button"
                             onClick={onCancelEdit}
-                            className="shrink-0 rounded-lg px-3 py-1.5 text-sm text-muted transition hover:bg-paper hover:text-ink"
+                            className="min-h-11 shrink-0 rounded-lg px-4 py-2 text-sm text-muted transition hover:bg-paper hover:text-ink"
                         >
-                            Cancel
+                            ยกเลิก
                         </button>
                     </div>
                 </div>
@@ -157,10 +157,10 @@ function ExpenseItem({ expenses, isEditing, onStartEdit, onCancelEdit, deleteExp
                                 : formatCurrency(amount)}
                         </span>
                     </div>
-                    <button type="button" onClick={editHandler} className="rounded-lg p-1 text-muted transition hover:bg-paper hover:text-ink">
+                    <button type="button" onClick={editHandler} aria-label={`แก้ไขรายการ${CATEGORY_LABELS[category]}`} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-muted transition hover:bg-paper hover:text-ink">
                         <LucideEdit size={16} />
                     </button>
-                    <button type="button" onClick={() => deleteExpense(id)} className="rounded-md p-1 text-muted transition hover:bg-paper hover:text-clay">
+                    <button type="button" onClick={() => deleteExpense(id)} aria-label={`ลบรายการ${CATEGORY_LABELS[category]}`} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-muted transition hover:bg-paper hover:text-clay">
                         <LucideTrash size={16} />
                     </button>
                 </div>

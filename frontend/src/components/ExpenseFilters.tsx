@@ -47,7 +47,7 @@ const MONTHS = [
 ]
 
 const SELECT_CLASS =
-    "rounded-lg border border-line bg-surface px-2 py-1 text-xs text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+    "min-h-11 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
 
 type ExpenseFiltersProps = {
     filters: ExpenseFiltersState
@@ -251,7 +251,7 @@ function ExpenseFilters({
                         onChange={(e) =>
                             updateFilter("search", e.target.value)
                         }
-                        className="w-full rounded-lg border border-line bg-paper py-1.5 pl-8 pr-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="min-h-11 w-full rounded-lg border border-line bg-paper py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                 </div>
 
@@ -267,13 +267,14 @@ function ExpenseFilters({
                             <button
                                 key={option.value}
                                 type="button"
+                                aria-pressed={filters.type === option.value}
                                 onClick={() =>
                                     updateFilter(
                                         "type",
                                         option.value
                                     )
                                 }
-                                className={`rounded-md px-2.5 py-1 text-xs font-medium transition ${
+                                className={`min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition ${
                                     filters.type === option.value
                                         ? "bg-ink text-white"
                                         : "text-muted hover:text-ink"

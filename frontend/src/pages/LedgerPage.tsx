@@ -50,6 +50,7 @@ function App() {
     const [chartExpenses, setChartExpenses] = useState<Expense[]>([])
     const [filters, setFilters] = useState(DEFAULT_FILTERS)
     const [loadError, setLoadError] = useState<string | null>(null)
+    const [isLoadingExpenses, setIsLoadingExpenses] = useState(true)
     const [userName, setUserName] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const navigate = useNavigate()
@@ -81,8 +82,16 @@ function App() {
         return { income, expense, balance: income - expense }
     }, [expenses])
 
+    const hasActiveFilters =
+        filters.search.trim().length > 0 ||
+        filters.type !== 'all' ||
+        filters.category !== 'all' ||
+        filters.timeRange !== 'all' ||
+        filters.sort !== 'date-desc'
+
     useEffect(() => {
         let cancelled = false
+        setIsLoadingExpenses(true)
             ; (async () => {
                 try {
                     setLoadError(null)
@@ -94,6 +103,8 @@ function App() {
                             err instanceof Error ? err.message : 'โหลดข้อมูลจากเซิร์ฟเวอร์ไม่สำเร็จ',
                         )
                     }
+                } finally {
+                    if (!cancelled) setIsLoadingExpenses(false)
                 }
             })()
         return () => {
@@ -244,7 +255,7 @@ function App() {
 
 
     return (
-        <div className='min-h-screen overflow-x-hidden bg-paper px-4 py-10 sm:px-8'>
+        <div className='min-h-screen overflow-x-hidden bg-paper px-4 pb-24 pt-6 sm:px-8 sm:py-10'>
             <header className='mx-auto mb-8 flex max-w-6xl items-center justify-between border-b border-line pb-6'>
                 <div>
                     <div className="flex items-center gap-2">
@@ -268,7 +279,7 @@ function App() {
             </header>
 
             {loadError ? (
-                <p className="mx-auto mb-4 max-w-6xl rounded-md border border-line bg-surface px-4 py-3 text-sm text-clay">
+                <p role="alert" className="mx-auto mb-4 max-w-6xl rounded-md border border-line bg-surface px-4 py-3 text-sm text-clay">
                     {loadError} — ตรวจว่า backend รันอยู่ (port 3000) และ MongoDB เชื่อมต่อได้
                 </p>
             ) : null}
@@ -278,10 +289,26 @@ function App() {
                 {/* ==================== MOBILE ==================== */}
                 <div className="space-y-4 lg:hidden">
 
+                    {/* Summary */}
+                    <div id="summary" className="scroll-mt-4">
+                        <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-muted">
+                            ภาพรวมการเงิน
+                        </p>
+                        <SummaryCards
+                            income={summary.income}
+                            expense={summary.expense}
+                            balance={summary.balance}
+                            isLoading={isLoadingExpenses}
+                            isError={Boolean(loadError)}
+                        />
+                    </div>
+
                     {/* Add Expense - Collapsible */}
                     <details id="add" className="scroll-mt-4 rounded-card border border-line bg-surface shadow-card">
-                        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-ink">
-                            + เพิ่มรายการ
+                        <summary className="flex min-h-14 cursor-pointer items-center gap-3 px-4 py-2 text-sm font-semibold text-ink">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-xl leading-none text-primary-dark">+</span>
+                            <span>เพิ่มรายการ</span>
+                            <span className="ml-auto hidden text-xs font-normal text-muted sm:inline">บันทึกรายรับหรือรายจ่าย</span>
                         </summary>
 
                         <div className="border-t border-line p-4">
@@ -298,20 +325,16 @@ function App() {
                         />
                     </div>
 
-                    {/* Summary */}
-                    <div id="summary" className="scroll-mt-4">
-                        <SummaryCards
-                            income={summary.income}
-                            expense={summary.expense}
-                            balance={summary.balance}
-                        />
-                    </div>
-
                     <div id="expenses" className="scroll-mt-4">
                         <ExpenseList
                             expenses={expenses}
                             deleteExpense={deleteExpense}
                             updateExpense={updateExpense}
+                            isLoading={isLoadingExpenses}
+                            isError={Boolean(loadError)}
+                            emptyMessage={loadError ? '' : hasActiveFilters
+                                ? 'ไม่พบรายการที่ตรงกับตัวกรอง ลองปรับคำค้นหาหรือช่วงเวลา'
+                                : 'ยังไม่มีรายการ — เพิ่มรายการแรกของคุณ'}
                         />
                     </div>
 
@@ -348,6 +371,19 @@ function App() {
                 {/* ==================== DESKTOP ==================== */}
                 <div className="hidden space-y-6 lg:block">
 
+                    <section aria-label="ภาพรวมการเงิน">
+                        <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-muted">
+                            ภาพรวมการเงิน
+                        </p>
+                        <SummaryCards
+                            income={summary.income}
+                            expense={summary.expense}
+                            balance={summary.balance}
+                            isLoading={isLoadingExpenses}
+                            isError={Boolean(loadError)}
+                        />
+                    </section>
+
                     <IncomeExpenseChart expenses={chartExpenses} />
 
                     <div className="grid gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
@@ -370,16 +406,15 @@ function App() {
                                 DEFAULT_FILTERS={DEFAULT_FILTERS}
                             />
 
-                            <SummaryCards
-                                income={summary.income}
-                                expense={summary.expense}
-                                balance={summary.balance}
-                            />
-
                             <ExpenseList
                                 expenses={expenses}
                                 deleteExpense={deleteExpense}
                                 updateExpense={updateExpense}
+                                isLoading={isLoadingExpenses}
+                                isError={Boolean(loadError)}
+                                emptyMessage={loadError ? '' : hasActiveFilters
+                                    ? 'ไม่พบรายการที่ตรงกับตัวกรอง ลองปรับคำค้นหาหรือช่วงเวลา'
+                                    : 'ยังไม่มีรายการ — เพิ่มรายการแรกของคุณ'}
                             />
 
                         </section>
